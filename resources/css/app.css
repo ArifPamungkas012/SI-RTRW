@@ -1,0 +1,35 @@
+/* resources/css/app.css */
+
+/* 1) Tailwind directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 2) Import font (lihat catatan di bawah untuk cara host font) */
+@font-face {
+  font-family: "Instrument Sans";
+  src: local("Instrument Sans"), url("/fonts/InstrumentSans.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 3) CSS variable fallback dan utilitas kecil */
+:root {
+  --font-sans: "Instrument Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    "Roboto", "Helvetica Neue", "Noto Sans", "Arial", "sans-serif", "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+/* set default font family */
+html {
+  font-family: var(--font-sans);
+}
+
+/* 4) Custom utilities / overrides (opsional) */
+@layer base {
+  /* small tweak to body bg if you want */
+  body { background-color: #f8fafc; }
+}
+
+/* you can add @layer components / utilities for custom classes */
