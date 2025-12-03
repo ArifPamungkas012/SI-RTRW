@@ -9,6 +9,8 @@ use App\Http\Controllers\DataWarga\WargaController;
 use App\Http\Controllers\DataWarga\KartuKeluargaController;
 use App\Http\Controllers\DataWarga\AnggotaKKController;
 
+use App\Http\Controllers\Kegiatan\KegiatanController;
+
 /*
 |--------------------------------------------------------------------------
 | Guest Routes (Belum Login)
@@ -85,8 +87,16 @@ Route::middleware('auth')->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | Logout
+    | KEGIATAN
     |--------------------------------------------------------------------------
     */
+    Route::prefix('kegiatan')->name('kegiatan.')->group(function () {
+        Route::get('/', [KegiatanController::class, 'index'])->name('index');
+        Route::post('/', [KegiatanController::class, 'store'])->name('store');
+        Route::put('/{id}', [KegiatanController::class, 'update'])->name('update');
+        Route::delete('/{id}', [KegiatanController::class, 'destroy'])->name('destroy');
+        Route::post('/{id}/restore', [KegiatanController::class, 'restore'])->name('restore');
+    });
+
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });
