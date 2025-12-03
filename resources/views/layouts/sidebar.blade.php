@@ -38,10 +38,18 @@
         <div class="label sidebar-label">Keuangan</div>
       </div>
       <div id="submenu-keuangan" class="sidebar-submenu hidden">
-        <div class="submenu-item" data-menu="iuran-warga" data-href="#">Iuran Warga</div>
-        <div class="submenu-item" data-menu="kas-rt" data-href="#">Kas RT/RW</div>
-        <div class="submenu-item" data-menu="pengeluaran" data-href="#">Pengeluaran</div>
-        <div class="submenu-item" data-menu="laporan-keuangan" data-href="#">Laporan Keuangan</div>
+        <div class="submenu-item {{ request()->routeIs('iuran.template.index') ? 'active' : '' }}"
+          data-menu="iuran-template" data-href="{{ route('iuran.template.index') }}">
+          Template Iuran
+        </div>
+        <div class="submenu-item {{ request()->routeIs('iuran.instance.index') ? 'active' : '' }}"
+          data-menu="iuran-warga" data-href="{{ route('iuran.instance.index') }}">Iuran Warga</div>
+        <div class="submenu-item {{ request()->routeIs('keuangan.kas.index') ? 'active' : '' }}" data-menu="kas-rt"
+          data-href="#">Kas RT/RW</div>
+        <div class="submenu-item {{ request()->routeIs('keuangan.pengeluaran.index') ? 'active' : '' }}"
+          data-menu="pengeluaran" data-href="#">Pengeluaran</div>
+        <div class="submenu-item {{ request()->routeIs('keuangan.laporan.index') ? 'active' : '' }}"
+          data-menu="laporan-keuangan" data-href="#">Laporan Keuangan</div>
       </div>
     </div>
 

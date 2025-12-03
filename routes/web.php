@@ -10,6 +10,8 @@ use App\Http\Controllers\DataWarga\KartuKeluargaController;
 use App\Http\Controllers\DataWarga\AnggotaKKController;
 
 use App\Http\Controllers\Kegiatan\KegiatanController;
+use App\Http\Controllers\Keuangan\IuranTemplateController;
+use App\Http\Controllers\Keuangan\IuranInstanceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -97,6 +99,23 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{id}', [KegiatanController::class, 'destroy'])->name('destroy');
         Route::post('/{id}/restore', [KegiatanController::class, 'restore'])->name('restore');
     });
+
+    Route::prefix('iuran/template')->name('iuran.template.')->group(function () {
+        Route::get('/', [IuranTemplateController::class, 'index'])->name('index');
+        Route::post('/', [IuranTemplateController::class, 'store'])->name('store');
+        Route::put('/{id}', [IuranTemplateController::class, 'update'])->name('update');
+        Route::delete('/{id}', [IuranTemplateController::class, 'destroy'])->name('destroy');
+        Route::post('/{id}/restore', [IuranTemplateController::class, 'restore'])->name('restore');
+    });
+
+    Route::prefix('iuran/instance')->name('iuran.instance.')->group(function () {
+        Route::get('/', [IuranInstanceController::class, 'index'])->name('index');
+        Route::post('/', [IuranInstanceController::class, 'store'])->name('store');
+        Route::put('/{id}', [IuranInstanceController::class, 'update'])->name('update');
+        Route::delete('/{id}', [IuranInstanceController::class, 'destroy'])->name('destroy');
+        Route::post('/{id}/restore', [IuranInstanceController::class, 'restore'])->name('restore');
+    });
+
 
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });
