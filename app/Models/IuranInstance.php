@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Carbon\Carbon;
 
 class IuranInstance extends Model
 {
@@ -16,7 +17,11 @@ class IuranInstance extends Model
         'periode',
         'due_date',
         'nominal',
-        'status'
+        'status',
+    ];
+
+    protected $casts = [
+        'due_date' => 'date',
     ];
 
     public function template()
@@ -27,5 +32,18 @@ class IuranInstance extends Model
     public function pembayaran()
     {
         return $this->hasMany(Pembayaran::class, 'iuran_instance_id');
+    }
+
+    // Akses cepat format periode (misal: Jan 2025)
+    public function getPeriodeLabelAttribute()
+    {
+        return $this->periode;
+    }
+
+    public function getDueDateFormattedAttribute()
+    {
+        return $this->due_date
+            ? Carbon::parse($this->due_date)->format('d M Y')
+            : null;
     }
 }

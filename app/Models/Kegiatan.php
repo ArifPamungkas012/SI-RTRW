@@ -18,14 +18,18 @@ class Kegiatan extends Model
         'waktu',
         'lokasi',
         'keterangan',
-        'penanggung_jawab_user_id'
+        'penanggung_jawab_user_id',
+    ];
+
+    protected $casts = [
+        'tanggal' => 'date',
     ];
 
     public function peserta()
     {
         return $this->belongsToMany(Warga::class, 'kegiatan_warga', 'kegiatan_id', 'warga_id')
-                    ->withPivot('role', 'status')
-                    ->withTimestamps();
+            ->withPivot('role', 'status')
+            ->withTimestamps();
     }
 
     public function penanggungJawab()

@@ -20,7 +20,11 @@ class Warga extends Model
         'rw',
         'no_hp',
         'tanggal_lahir',
-        'status_aktif'
+        'status_aktif',
+    ];
+
+    protected $casts = [
+        'tanggal_lahir' => 'date',
     ];
 
     public function anggotaKK()
@@ -36,12 +40,17 @@ class Warga extends Model
     public function kegiatan()
     {
         return $this->belongsToMany(Kegiatan::class, 'kegiatan_warga', 'warga_id', 'kegiatan_id')
-                     ->withPivot('role','status')
-                     ->withTimestamps();
+            ->withPivot('role', 'status')
+            ->withTimestamps();
     }
 
     public function userAccount()
     {
         return $this->hasOne(User::class, 'warga_id');
+    }
+
+    public function mutasi()
+    {
+        return $this->hasMany(MutasiWarga::class, 'warga_id');
     }
 }

@@ -40,13 +40,15 @@ class AnggotaKKController extends Controller
         return back()->with('success', 'Anggota berhasil ditambahkan.');
     }
 
+
     /**
      * Hapus anggota dari KK
      */
     public function destroy($kkId, $anggotaId)
     {
-        $anggota = AnggotaKK::where('kk_id', $kkId)->where('id', $anggotaId)->firstOrFail();
+        $anggota = AnggotaKK::where('kk_id', $kkId)->findOrFail($anggotaId);
         $anggota->delete();
-        return back()->with('success', 'Anggota dihapus dari KK.');
+
+        return back()->with('success', 'Anggota KK berhasil dihapus.');
     }
 }

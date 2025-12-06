@@ -30,11 +30,21 @@ class IuranInstanceController extends Controller
             })
             ->orderBy('periode', 'desc')
             ->orderBy('due_date', 'asc')
-            ->paginate(10);
+            ->paginate(10)
+            ->appends($request->only(['q', 'status', 'periode'])); // supaya paginasi tetap bawa filter
 
         $templates = IuranTemplate::orderBy('nama')->get();
 
-        return view('Keuangan.iuran.index', compact('instances', 'templates'));
+        // ⛔ sebelumnya: view('Keuangan.iuran.index')
+        // ✅ sesuaikan dengan folder Blade: resources/views/keuangan/iuran/instance/index.blade.php
+        return view('Keuangan.iuran.index', compact(
+            'instances',
+            'templates',
+            'q',
+            'status',
+            'periode'
+        ));
+
     }
 
     public function store(Request $request)
@@ -52,7 +62,7 @@ class IuranInstanceController extends Controller
             'periode',
             'due_date',
             'nominal',
-            'status'
+            'status',
         ]));
 
         return back()->with('success', 'Iuran periode baru berhasil dibuat.');
@@ -66,8 +76,10 @@ class IuranInstanceController extends Controller
         ]);
 
         $instance = IuranInstance::findOrFail($id);
+
         $data = $request->only(['status', 'nominal']);
-        $data = array_filter($data, fn($v) => !is_null($v)); // hapus null
+        // buang nilai null supaya tidak menimpa dengan null
+        $data = array_filter($data, fn($v) => !is_null($v));
 
         $instance->update($data);
 

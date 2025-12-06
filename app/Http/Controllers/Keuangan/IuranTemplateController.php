@@ -13,13 +13,18 @@ class IuranTemplateController extends Controller
         $q = $request->q;
 
         $templates = IuranTemplate::when($q, function ($query) use ($q) {
-            $query->where('nama', 'like', "%$q%")
-                ->orWhere('jenis', 'like', "%$q%");
+            $query->where(function ($sub) use ($q) {
+                $sub->where('nama', 'like', "%{$q}%")
+                    ->orWhere('jenis', 'like', "%{$q}%");
+            });
         })
             ->orderBy('created_at', 'desc')
-            ->paginate(10);
+            ->paginate(10)
+            ->appends($request->only(['q']));
 
-        return view('Keuangan.template.index', compact('templates'));
+        // ⛔ sebelumnya: view('Keuangan.template.index')
+        // ✅ sesuaikan dengan folder Blade: resources/views/keuangan/iuran/template/index.blade.php
+        return view('Keuangan.template.index', compact('templates', 'q'));
     }
 
     public function store(Request $request)
@@ -31,7 +36,12 @@ class IuranTemplateController extends Controller
             'keterangan' => 'nullable|string',
         ]);
 
-        IuranTemplate::create($request->all());
+        IuranTemplate::create($request->only([
+            'nama',
+            'jenis',
+            'nominal_default',
+            'keterangan',
+        ]));
 
         return back()->with('success', 'Template iuran berhasil ditambahkan.');
     }
@@ -46,7 +56,13 @@ class IuranTemplateController extends Controller
         ]);
 
         $template = IuranTemplate::findOrFail($id);
-        $template->update($request->all());
+
+        $template->update($request->only([
+            'nama',
+            'jenis',
+            'nominal_default',
+            'keterangan',
+        ]));
 
         return back()->with('success', 'Template iuran berhasil diperbarui.');
     }
@@ -54,12 +70,14 @@ class IuranTemplateController extends Controller
     public function destroy($id)
     {
         IuranTemplate::findOrFail($id)->delete();
+
         return back()->with('success', 'Template berhasil dihapus.');
     }
 
     public function restore($id)
     {
         IuranTemplate::withTrashed()->findOrFail($id)->restore();
+
         return back()->with('success', 'Template berhasil dipulihkan.');
     }
 }

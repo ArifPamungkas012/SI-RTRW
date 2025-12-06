@@ -16,12 +16,22 @@ class KartuKeluarga extends Model
         'alamat',
         'rt',
         'rw',
-        'kepala_keluarga',
-        'tanggal_dibuat'
+        'kepala_keluarga',   // saat ini masih nama / teks
+        'tanggal_dibuat',
+    ];
+
+    protected $casts = [
+        'tanggal_dibuat' => 'date',
     ];
 
     public function anggota()
     {
         return $this->hasMany(AnggotaKK::class, 'kk_id');
     }
+
+    // Kalau suatu saat kepala_keluarga jadi FK ke Warga:
+    // public function kepalaKeluargaWarga()
+    // {
+    //     return $this->belongsTo(Warga::class, 'kepala_keluarga_id');
+    // }
 }

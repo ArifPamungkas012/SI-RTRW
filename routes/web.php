@@ -8,10 +8,20 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\DataWarga\WargaController;
 use App\Http\Controllers\DataWarga\KartuKeluargaController;
 use App\Http\Controllers\DataWarga\AnggotaKKController;
+use App\Http\Controllers\DataWarga\MutasiWargaController;
+
 
 use App\Http\Controllers\Kegiatan\KegiatanController;
+use App\Http\Controllers\Kegiatan\RiwayatKegiatanController;
+
+
 use App\Http\Controllers\Keuangan\IuranTemplateController;
 use App\Http\Controllers\Keuangan\IuranInstanceController;
+use App\Http\Controllers\Keuangan\KasController;
+use App\Http\Controllers\Keuangan\PengeluaranController;
+use App\Http\Controllers\Keuangan\KategoriKeuanganController;
+use App\Http\Controllers\Keuangan\MetodePembayaranController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -71,6 +81,14 @@ Route::middleware('auth')->group(function () {
         Route::post('/warga/{id}/restore', [WargaController::class, 'restore'])->name('warga.restore');
 
 
+        // ------------------ MUTASI WARGA ------------------
+        Route::get('/mutasi', [MutasiWargaController::class, 'index'])->name('mutasi.index');
+        Route::get('/mutasi/create', [MutasiWargaController::class, 'create'])->name('mutasi.create');
+        Route::post('/mutasi', [MutasiWargaController::class, 'store'])->name('mutasi.store');
+
+        Route::delete('/mutasi/{mutasi}', [MutasiWargaController::class, 'destroy'])->name('mutasi.destroy');
+
+
         // ------------------ KARTU KELUARGA ------------------
         Route::get('/kk', [KartuKeluargaController::class, 'index'])->name('kk.index');
         Route::get('/kk/create', [KartuKeluargaController::class, 'create'])->name('kk.create');
@@ -98,23 +116,63 @@ Route::middleware('auth')->group(function () {
         Route::put('/{id}', [KegiatanController::class, 'update'])->name('update');
         Route::delete('/{id}', [KegiatanController::class, 'destroy'])->name('destroy');
         Route::post('/{id}/restore', [KegiatanController::class, 'restore'])->name('restore');
+
+        Route::get('/riwayat', [RiwayatKegiatanController::class, 'index'])->name('riwayat.index');
     });
 
-    Route::prefix('iuran/template')->name('iuran.template.')->group(function () {
-        Route::get('/', [IuranTemplateController::class, 'index'])->name('index');
-        Route::post('/', [IuranTemplateController::class, 'store'])->name('store');
-        Route::put('/{id}', [IuranTemplateController::class, 'update'])->name('update');
-        Route::delete('/{id}', [IuranTemplateController::class, 'destroy'])->name('destroy');
-        Route::post('/{id}/restore', [IuranTemplateController::class, 'restore'])->name('restore');
+    Route::prefix('keuangan')->name('keuangan.')->group(function () {
+        // KAS
+        Route::get('/kas', [KasController::class, 'index'])->name('kas.index');
+        Route::post('/kas', [KasController::class, 'store'])->name('kas.store');
+        Route::delete('/kas/{kas}', [KasController::class, 'destroy'])->name('kas.destroy');
+
+        // PENGELUARAN
+        Route::get('/pengeluaran', [PengeluaranController::class, 'index'])->name('pengeluaran.index');
+        Route::post('/pengeluaran', [PengeluaranController::class, 'store'])->name('pengeluaran.store');
+        Route::delete('/pengeluaran/{kas}', [PengeluaranController::class, 'destroy'])->name('pengeluaran.destroy');
+
+        // MASTER KATEGORI KEUANGAN
+        Route::get('/kategori-keuangan', [KategoriKeuanganController::class, 'index'])->name('kategori.index');
+        Route::post('/kategori-keuangan', [KategoriKeuanganController::class, 'store'])->name('kategori.store');
+        Route::put('/kategori-keuangan/{kategori}', [KategoriKeuanganController::class, 'update'])->name('kategori.update');
+        Route::delete('/kategori-keuangan/{kategori}', [KategoriKeuanganController::class, 'destroy'])->name('kategori.destroy');
+        Route::post('/kategori-keuangan/{id}/restore', [KategoriKeuanganController::class, 'restore'])->name('kategori.restore');
+
+        // MASTER METODE PEMBAYARAN
+        Route::get('/metode-pembayaran', [MetodePembayaranController::class, 'index'])->name('metode.index');
+        Route::post('/metode-pembayaran', [MetodePembayaranController::class, 'store'])->name('metode.store');
+        Route::put('/metode-pembayaran/{metode}', [MetodePembayaranController::class, 'update'])->name('metode.update');
+        Route::delete('/metode-pembayaran/{metode}', [MetodePembayaranController::class, 'destroy'])->name('metode.destroy');
+        Route::post('/metode-pembayaran/{id}/restore', [MetodePembayaranController::class, 'restore'])->name('metode.restore');
+
+        // ===== IURAN (di bawah /keuangan/iuran/...) =====
+        Route::prefix('iuran')->name('iuran.')->group(function () {
+
+            // IURAN TEMPLATE → /keuangan/iuran/template
+            Route::prefix('template')->name('template.')->group(function () {
+                Route::get('/', [IuranTemplateController::class, 'index'])->name('index');
+                Route::post('/', [IuranTemplateController::class, 'store'])->name('store');
+                Route::put('/{id}', [IuranTemplateController::class, 'update'])->name('update');
+                Route::delete('/{id}', [IuranTemplateController::class, 'destroy'])->name('destroy');
+                Route::post('/{id}/restore', [IuranTemplateController::class, 'restore'])->name('restore');
+            });
+
+            // IURAN INSTANCE → /keuangan/iuran/instance
+            Route::prefix('instance')->name('instance.')->group(function () {
+                Route::get('/', [IuranInstanceController::class, 'index'])->name('index');
+                Route::post('/', [IuranInstanceController::class, 'store'])->name('store');
+                Route::put('/{id}', [IuranInstanceController::class, 'update'])->name('update');
+                Route::delete('/{id}', [IuranInstanceController::class, 'destroy'])->name('destroy');
+                Route::post('/{id}/restore', [IuranInstanceController::class, 'restore'])->name('restore');
+            });
+        });
     });
 
-    Route::prefix('iuran/instance')->name('iuran.instance.')->group(function () {
-        Route::get('/', [IuranInstanceController::class, 'index'])->name('index');
-        Route::post('/', [IuranInstanceController::class, 'store'])->name('store');
-        Route::put('/{id}', [IuranInstanceController::class, 'update'])->name('update');
-        Route::delete('/{id}', [IuranInstanceController::class, 'destroy'])->name('destroy');
-        Route::post('/{id}/restore', [IuranInstanceController::class, 'restore'])->name('restore');
-    });
+
+
+
+
+
 
 
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');

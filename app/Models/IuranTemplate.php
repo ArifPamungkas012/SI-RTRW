@@ -15,11 +15,17 @@ class IuranTemplate extends Model
         'nama',
         'jenis',
         'nominal_default',
-        'keterangan'
+        'keterangan',
+        'kategori_keuangan_id', // FK ke kategori_keuangan
     ];
 
     public function instances()
     {
         return $this->hasMany(IuranInstance::class, 'template_id');
+    }
+
+    public function kategoriKeuangan()
+    {
+        return $this->belongsTo(KategoriKeuangan::class, 'kategori_keuangan_id');
     }
 }

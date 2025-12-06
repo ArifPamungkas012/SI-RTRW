@@ -11,7 +11,7 @@ class AnggotaKK extends Model
     protected $fillable = [
         'kk_id',
         'warga_id',
-        'hubungan'
+        'hubungan',
     ];
 
     public function kk()

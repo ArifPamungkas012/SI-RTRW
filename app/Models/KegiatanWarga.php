@@ -12,6 +12,16 @@ class KegiatanWarga extends Model
         'kegiatan_id',
         'warga_id',
         'role',
-        'status'
+        'status',
     ];
+
+    public function kegiatan()
+    {
+        return $this->belongsTo(Kegiatan::class, 'kegiatan_id');
+    }
+
+    public function warga()
+    {
+        return $this->belongsTo(Warga::class, 'warga_id');
+    }
 }

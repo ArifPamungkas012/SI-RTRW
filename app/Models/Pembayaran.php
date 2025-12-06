@@ -16,11 +16,16 @@ class Pembayaran extends Model
         'warga_id',
         'tanggal_bayar',
         'amount',
-        'metode',
+        'metode',          // legacy (teks)
+        'metode_id',       // FK ke metode_pembayaran (baru)
         'status_verifikasi',
         'receipt_no',
         'proof_path',
-        'recorded_by'
+        'recorded_by',
+    ];
+
+    protected $casts = [
+        'tanggal_bayar' => 'datetime',
     ];
 
     public function instance()
@@ -36,5 +41,10 @@ class Pembayaran extends Model
     public function pencatat()
     {
         return $this->belongsTo(User::class, 'recorded_by');
+    }
+
+    public function metodePembayaran()
+    {
+        return $this->belongsTo(MetodePembayaran::class, 'metode_id');
     }
 }
