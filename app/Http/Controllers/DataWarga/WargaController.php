@@ -77,6 +77,32 @@ class WargaController extends Controller
         return view('datawarga.warga.show', compact('warga'));
     }
 
+    public function detail(Warga $warga)
+    {
+        // load relasi yang dibutuhkan
+        $warga->load('anggotaKK', 'pembayaran', 'userAccount');
+
+        return response()->json([
+            'id' => $warga->id,
+            'nik' => $warga->nik,
+            'nama' => $warga->nama,
+            'alamat' => $warga->alamat,
+            'no_rumah' => $warga->no_rumah,
+            'rt' => $warga->rt,
+            'rw' => $warga->rw,
+            'no_hp' => $warga->no_hp,
+            'tanggal_lahir' => $warga->tanggal_lahir?->format('Y-m-d'),
+            'status_aktif' => (bool) $warga->status_aktif,
+
+            'relasi' => [
+                'jumlah_anggota_kk' => $warga->anggotaKK->count(),
+                'total_pembayaran' => $warga->pembayaran->count(),
+                'user' => $warga->userAccount?->only(['id', 'name', 'email']),
+            ],
+        ]);
+    }
+
+
     public function edit(Warga $warga)
     {
         return view('datawarga.warga.edit', compact('warga'));
@@ -115,4 +141,5 @@ class WargaController extends Controller
         $warga->restore();
         return redirect()->route('datawarga.warga.index')->with('success', 'Warga dipulihkan.');
     }
+
 }

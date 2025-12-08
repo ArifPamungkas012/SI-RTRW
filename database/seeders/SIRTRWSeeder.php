@@ -7,22 +7,24 @@ use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 
 // Models
-use App\Models\Warga;
-use App\Models\User;
-use App\Models\KartuKeluarga;
-use App\Models\AnggotaKK;
-use App\Models\KategoriKeuangan;
-use App\Models\MetodePembayaran;
-use App\Models\ProfilWilayah;
-use App\Models\Kas;
-use App\Models\Transaction;
-use App\Models\IuranTemplate;
-use App\Models\IuranInstance;
-use App\Models\Pembayaran;
-use App\Models\Kegiatan;
-use App\Models\KegiatanWarga;
-use App\Models\MutasiWarga;
-use App\Models\Notifikasi;
+use App\Models\{
+    Warga,
+    User,
+    KartuKeluarga,
+    AnggotaKK,
+    KategoriKeuangan,
+    MetodePembayaran,
+    ProfilWilayah,
+    Kas,
+    Transaction,
+    IuranTemplate,
+    IuranInstance,
+    Pembayaran,
+    Kegiatan,
+    KegiatanWarga,
+    MutasiWarga,
+    Notifikasi
+};
 
 class SIRTRWSeeder extends Seeder
 {
@@ -30,104 +32,71 @@ class SIRTRWSeeder extends Seeder
     {
         $faker = fake('id_ID');
 
-        /**
+        /* ===========================================================
          * 1. PROFIL WILAYAH
-         *    Idempotent: kalau sudah ada nama_rt_rw = "RT 05 / RW 03" → update saja
-         */
+         * =========================================================== */
         $profil = ProfilWilayah::updateOrCreate(
             ['nama_rt_rw' => 'RT 05 / RW 03'],
             [
                 'alamat_sekretariat' => 'Jl. Melati No. 8, Kelurahan Sukamaju',
                 'kontak' => '0812-3456-7890',
                 'logo_path' => null,
-                'deskripsi' => 'Sistem Informasi RT 05 / RW 03 untuk pengelolaan data warga, keuangan, dan kegiatan.',
+                'deskripsi' => 'Wilayah RT 05 / RW 03 – data dummy otomatis.'
             ]
         );
 
-        /**
-         * 2. MASTER KATEGORI KEUANGAN (pakai kode sebagai key unik)
-         */
-        $kategoriIuran = KategoriKeuangan::updateOrCreate(
-            ['kode' => 'IRW'],
-            [
-                'nama' => 'Iuran Rutin Warga',
-                'tipe' => 'masuk',
-                'deskripsi' => 'Iuran bulanan rutin untuk kas RT/RW.',
-                'is_active' => true,
-            ]
-        );
+        /* ===========================================================
+         * 2. MASTER KATEGORI KEUANGAN
+         * =========================================================== */
+        $kategori = [
+            ['IRW', 'Iuran Rutin Warga', 'masuk'],
+            ['SOS', 'Dana Sosial', 'keluar'],
+            ['KGN', 'Dana Kegiatan', 'keluar'],
+            ['DAR', 'Donasi Darurat', 'masuk'],
+            ['PJM', 'Pinjaman Warga', 'keluar'],
+        ];
 
-        $kategoriSosial = KategoriKeuangan::updateOrCreate(
-            ['kode' => 'SOS'],
-            [
-                'nama' => 'Dana Sosial',
-                'tipe' => 'keluar',
-                'deskripsi' => 'Pengeluaran dana sosial dan bantuan warga.',
-                'is_active' => true,
-            ]
-        );
+        $kategoriMap = [];
+        foreach ($kategori as $k) {
+            $kategoriMap[$k[0]] = KategoriKeuangan::updateOrCreate(
+                ['kode' => $k[0]],
+                ['nama' => $k[1], 'tipe' => $k[2], 'is_active' => 1]
+            );
+        }
 
-        $kategoriKegiatan = KategoriKeuangan::updateOrCreate(
-            ['kode' => 'KGN'],
-            [
-                'nama' => 'Dana Kegiatan',
-                'tipe' => 'keluar',
-                'deskripsi' => 'Dana untuk kegiatan RT/RW.',
-                'is_active' => true,
-            ]
-        );
+        /* ===========================================================
+         * 3. METODE PEMBAYARAN
+         * =========================================================== */
+        $metodes = ['Cash', 'Transfer Bank', 'E-Wallet', 'QRIS', 'VA Bank BCA'];
+        $metodeMap = [];
+        foreach ($metodes as $m) {
+            $metodeMap[$m] = MetodePembayaran::updateOrCreate(
+                ['nama' => $m],
+                ['deskripsi' => "Pembayaran via $m", 'is_active' => 1]
+            );
+        }
 
-        /**
-         * 3. METODE PEMBAYARAN (pakai nama sebagai key unik)
-         */
-        $metodeCash = MetodePembayaran::updateOrCreate(
-            ['nama' => 'Cash'],
-            [
-                'deskripsi' => 'Pembayaran tunai kepada pengurus RT.',
-                'is_active' => true,
-            ]
-        );
-
-        $metodeTransfer = MetodePembayaran::updateOrCreate(
-            ['nama' => 'Transfer Bank'],
-            [
-                'deskripsi' => 'Transfer ke rekening kas RT.',
-                'is_active' => true,
-            ]
-        );
-
-        $metodeEWallet = MetodePembayaran::updateOrCreate(
-            ['nama' => 'E-Wallet'],
-            [
-                'deskripsi' => 'Pembayaran via dompet digital (OVO, Gopay, dll).',
-                'is_active' => true,
-            ]
-        );
-
-        /**
-         * 4. DATA WARGA
-         *    (masih create, disarankan dipakai di environment fresh / dev)
-         */
+        /* ===========================================================
+         * 4. DATA WARGA (40 ORANG)
+         * =========================================================== */
         $warga = collect();
-
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 40; $i++) {
             $warga->push(Warga::create([
                 'nik' => $faker->unique()->numerify('3273##########'),
                 'nama' => $faker->name(),
-                'alamat' => 'Jl. Melati No. ' . $faker->numberBetween(1, 30),
-                'no_rumah' => (string) $faker->numberBetween(1, 30),
+                'alamat' => 'Jl. Melati No. ' . $faker->numberBetween(1, 40),
+                'no_rumah' => (string) $faker->numberBetween(1, 40),
                 'rt' => '05',
                 'rw' => '03',
                 'no_hp' => $faker->phoneNumber(),
-                'tanggal_lahir' => $faker->dateTimeBetween('-60 years', '-18 years'),
-                'status_aktif' => true,
+                'tanggal_lahir' => $faker->dateTimeBetween('-70 years', '-17 years'),
+                'status_aktif' => 1
             ]));
         }
 
-        /**
-         * 5. USERS (akun login)
-         *    Pakai updateOrCreate supaya tidak error duplicate `username`.
-         */
+        /* ===========================================================
+         * 5. USERS (admin, ketua, bendahara)
+         * =========================================================== */
         $userAdmin = User::updateOrCreate(
             ['username' => 'admin'],
             [
@@ -135,7 +104,7 @@ class SIRTRWSeeder extends Seeder
                 'email' => 'admin@example.com',
                 'password' => Hash::make('password'),
                 'role' => 'admin',
-                'warga_id' => $warga[0]->id ?? null,
+                'warga_id' => $warga[0]->id,
             ]
         );
 
@@ -146,7 +115,7 @@ class SIRTRWSeeder extends Seeder
                 'email' => 'ketua@example.com',
                 'password' => Hash::make('password'),
                 'role' => 'pengurus',
-                'warga_id' => $warga[1]->id ?? null,
+                'warga_id' => $warga[1]->id,
             ]
         );
 
@@ -157,250 +126,186 @@ class SIRTRWSeeder extends Seeder
                 'email' => 'bendahara@example.com',
                 'password' => Hash::make('password'),
                 'role' => 'bendahara',
-                'warga_id' => $warga[2]->id ?? null,
+                'warga_id' => $warga[2]->id,
             ]
         );
 
-        /**
-         * 6. KARTU KELUARGA + ANGGOTA KK
-         */
-        $kk1 = KartuKeluarga::create([
-            'no_kk' => '3273' . $faker->numerify('##########'),
-            'alamat' => 'Jl. Melati No. 10',
-            'rt' => '05',
-            'rw' => '03',
-            'kepala_keluarga' => $warga[0]->nama,
-            'tanggal_dibuat' => Carbon::now()->subYears(5),
-        ]);
+        /* ===========================================================
+         * 6. KARTU KELUARGA (15 KK)
+         * =========================================================== */
+        $kkList = collect();
+        for ($i = 0; $i < 15; $i++) {
+            $kk = KartuKeluarga::create([
+                'no_kk' => '3273' . $faker->numerify('##########'),
+                'alamat' => 'Jl. Melati No. ' . $faker->numberBetween(1, 40),
+                'rt' => '05',
+                'rw' => '03',
+                'kepala_keluarga' => $warga[$i]->nama,
+                'tanggal_dibuat' => Carbon::now()->subYears(rand(1, 10)),
+            ]);
+            $kkList->push($kk);
 
-        $kk2 = KartuKeluarga::create([
-            'no_kk' => '3273' . $faker->numerify('##########'),
-            'alamat' => 'Jl. Melati No. 12',
-            'rt' => '05',
-            'rw' => '03',
-            'kepala_keluarga' => $warga[3]->nama,
-            'tanggal_dibuat' => Carbon::now()->subYears(3),
-        ]);
+            // Set 2–4 anggota per KK
+            $jumlahAnggota = rand(2, 4);
+            for ($j = 0; $j < $jumlahAnggota; $j++) {
+                AnggotaKK::create([
+                    'kk_id' => $kk->id,
+                    'warga_id' => $warga->random()->id,
+                    'hubungan' => $j == 0 ? 'Kepala Keluarga' : $faker->randomElement(['Istri', 'Anak', 'Saudara']),
+                ]);
+            }
+        }
 
-        // Anggota KK1
-        AnggotaKK::create([
-            'kk_id' => $kk1->id,
-            'warga_id' => $warga[0]->id,
-            'hubungan' => 'Kepala Keluarga',
-        ]);
-        AnggotaKK::create([
-            'kk_id' => $kk1->id,
-            'warga_id' => $warga[1]->id,
-            'hubungan' => 'Istri',
-        ]);
-        AnggotaKK::create([
-            'kk_id' => $kk1->id,
-            'warga_id' => $warga[2]->id,
-            'hubungan' => 'Anak',
-        ]);
+        /* ===========================================================
+         * 7. KEGIATAN (20 kegiatan)
+         * =========================================================== */
+        $kegiatanList = collect();
 
-        // Anggota KK2
-        AnggotaKK::create([
-            'kk_id' => $kk2->id,
-            'warga_id' => $warga[3]->id,
-            'hubungan' => 'Kepala Keluarga',
-        ]);
-        AnggotaKK::create([
-            'kk_id' => $kk2->id,
-            'warga_id' => $warga[4]->id,
-            'hubungan' => 'Istri',
-        ]);
+        for ($i = 0; $i < 20; $i++) {
+            $k = Kegiatan::create([
+                'nama' => $faker->randomElement(['Kerja Bakti', 'Ronda Malam', 'Rapat Bulanan', 'Senam Warga'])
+                    . ' #' . ($i + 1),
+                'jenis' => $faker->randomElement(['Rapat', 'Kerja Bakti', 'Sosial']),
+                'tanggal' => Carbon::now()->addDays(rand(1, 60)),
+                'waktu' => $faker->time(),
+                'lokasi' => 'Posko RW',
+                'keterangan' => 'Kegiatan rutin warga',
+                'penanggung_jawab_user_id' => $userKetua->id,
+            ]);
+            $kegiatanList->push($k);
 
-        /**
-         * 7. KEGIATAN + KEGIATAN_WARGA
-         */
-        $kerjaBakti = Kegiatan::create([
-            'nama' => 'Kerja Bakti Mingguan',
-            'jenis' => 'Kerja Bakti',
-            'tanggal' => Carbon::now()->addDays(7),
-            'waktu' => '07:00',
-            'lokasi' => 'Lingkungan RT 05 / RW 03',
-            'keterangan' => 'Membersihkan selokan dan lingkungan sekitar.',
-            'penanggung_jawab_user_id' => $userKetua->id,
-        ]);
+            // Undang 10 warga acak
+            foreach ($warga->random(10) as $w) {
+                KegiatanWarga::create([
+                    'kegiatan_id' => $k->id,
+                    'warga_id' => $w->id,
+                    'role' => 'Peserta',
+                    'status' => $faker->randomElement(['diundang', 'hadir', 'tidak hadir']),
+                ]);
+            }
+        }
 
-        $rapatBulan = Kegiatan::create([
-            'nama' => 'Rapat Bulanan Warga',
-            'jenis' => 'Rapat',
-            'tanggal' => Carbon::now()->addDays(14),
-            'waktu' => '20:00',
-            'lokasi' => 'Pos Ronda RT 05',
-            'keterangan' => 'Laporan kas dan pembahasan kegiatan bulan depan.',
-            'penanggung_jawab_user_id' => $userKetua->id,
-        ]);
+        /* ===========================================================
+         * 8. IURAN TEMPLATE (6 template)
+         * =========================================================== */
+        $templates = collect();
+        $templateNames = [
+            ['Iuran Kebersihan', 50000],
+            ['Iuran Keamanan', 30000],
+            ['Iuran Jalan', 40000],
+            ['Iuran Sosial', 20000],
+            ['Sumbangan Kegiatan', 25000],
+            ['Iuran Lampu Jalan', 15000],
+        ];
 
-        foreach ($warga->take(5) as $w) {
-            KegiatanWarga::create([
-                'kegiatan_id' => $kerjaBakti->id,
-                'warga_id' => $w->id,
-                'role' => 'Peserta',
-                'status' => 'diundang',
+        foreach ($templateNames as $t) {
+            $templates->push(IuranTemplate::create([
+                'nama' => $t[0],
+                'jenis' => 'Bulanan',
+                'nominal_default' => $t[1],
+                'kategori_keuangan_id' => $kategoriMap['IRW']->id
+            ]));
+        }
+
+        /* ===========================================================
+         * 9. IURAN INSTANCES (12 bulan × 6 template)
+         * =========================================================== */
+        $instances = collect();
+        foreach ($templates as $template) {
+            for ($m = 1; $m <= 12; $m++) {
+                $periode = "2025-" . str_pad($m, 2, '0', STR_PAD_LEFT);
+
+                $instances->push(IuranInstance::create([
+                    'template_id' => $template->id,
+                    'periode' => $periode,
+                    'due_date' => "$periode-10",
+                    'nominal' => $template->nominal_default,
+                    'status' => 'aktif',
+                ]));
+            }
+        }
+
+        /* ===========================================================
+         * 10. KAS (50 entri)
+         * =========================================================== */
+        $kasList = collect();
+        $saldo = 0;
+
+        for ($i = 0; $i < 50; $i++) {
+            $isMasuk = rand(0, 1);
+            $nominal = rand(10000, 200000);
+            $saldo = $isMasuk ? $saldo + $nominal : $saldo - $nominal;
+
+            $kas = Kas::create([
+                'tanggal' => Carbon::now()->subDays(rand(1, 120)),
+                'tipe' => $isMasuk ? 'masuk' : 'keluar',
+                'kategori' => $faker->randomElement(['Iuran Warga', 'Dana Sosial', 'Kegiatan']),
+                'kategori_id' => $kategoriMap['IRW']->id,
+                'nominal' => $nominal,
+                'keterangan' => $faker->sentence(),
+                'recorded_by' => $userBendahara->id,
+            ]);
+
+            Transaction::create([
+                'tanggal' => $kas->tanggal,
+                'type' => $isMasuk ? 'in' : 'out',
+                'kategori' => $kas->kategori,
+                'kategori_id' => $kas->kategori_id,
+                'reference_table' => 'kas',
+                'reference_id' => $kas->id,
+                'amount' => $nominal,
+                'balance_after' => $saldo,
+                'recorded_by' => $userBendahara->id,
+                'description' => $kas->keterangan
             ]);
         }
 
-        /**
-         * 8. IURAN TEMPLATE + INSTANCE
-         */
-        $templateIuranBulanan = IuranTemplate::create([
-            'nama' => 'Iuran Kebersihan Bulanan',
-            'jenis' => 'Bulanan',
-            'nominal_default' => 50000,
-            'keterangan' => 'Iuran rutin bulanan untuk kas kebersihan lingkungan.',
-            'kategori_keuangan_id' => $kategoriIuran->id,
-        ]);
+        /* ===========================================================
+         * 11. PEMBAYARAN IURAN (150 entri acak)
+         * =========================================================== */
+        for ($i = 0; $i < 150; $i++) {
+            $inst = $instances->random();
+            $wr = $warga->random();
+            $metode = $metodeMap[array_rand($metodeMap)];
 
-        $templateIuranKeamanan = IuranTemplate::create([
-            'nama' => 'Iuran Keamanan',
-            'jenis' => 'Bulanan',
-            'nominal_default' => 30000,
-            'keterangan' => 'Iuran untuk operasional keamanan dan ronda.',
-            'kategori_keuangan_id' => $kategoriIuran->id,
-        ]);
+            Pembayaran::create([
+                'iuran_instance_id' => $inst->id,
+                'warga_id' => $wr->id,
+                'tanggal_bayar' => Carbon::now()->subDays(rand(1, 100)),
+                'amount' => $inst->nominal,
+                'metode' => $metode->nama,
+                'metode_id' => $metode->id,
+                'status_verifikasi' => $faker->randomElement(['menunggu', 'terverifikasi']),
+                'receipt_no' => 'IR-' . $faker->numerify('########'),
+                'proof_path' => null,
+                'recorded_by' => $userBendahara->id,
+            ]);
+        }
 
-        $instanceJan = IuranInstance::create([
-            'template_id' => $templateIuranBulanan->id,
-            'periode' => '2025-01',
-            'due_date' => '2025-01-10',
-            'nominal' => 50000,
-            'status' => 'aktif',
-        ]);
+        /* ===========================================================
+         * 12. MUTASI WARGA (20 entri)
+         * =========================================================== */
+        for ($i = 0; $i < 20; $i++) {
+            MutasiWarga::create([
+                'warga_id' => $warga->random()->id,
+                'jenis' => $faker->randomElement(['masuk', 'keluar']),
+                'tanggal' => Carbon::now()->subDays(rand(10, 300)),
+                'keterangan' => $faker->sentence(),
+            ]);
+        }
 
-        $instanceFeb = IuranInstance::create([
-            'template_id' => $templateIuranBulanan->id,
-            'periode' => '2025-02',
-            'due_date' => '2025-02-10',
-            'nominal' => 50000,
-            'status' => 'aktif',
-        ]);
-
-        /**
-         * 9. KAS (saldo kas RT)
-         */
-        $kasMasuk1 = Kas::create([
-            'tanggal' => Carbon::now()->subDays(10),
-            'tipe' => 'masuk',
-            'kategori' => 'Iuran Warga',
-            'kategori_id' => $kategoriIuran->id,
-            'nominal' => 500000,
-            'keterangan' => 'Setoran iuran kebersihan bulan Januari.',
-            'recorded_by' => $userBendahara->id,
-        ]);
-
-        $kasKeluar1 = Kas::create([
-            'tanggal' => Carbon::now()->subDays(5),
-            'tipe' => 'keluar',
-            'kategori' => 'Pembelian Peralatan',
-            'kategori_id' => $kategoriKegiatan->id,
-            'nominal' => 200000,
-            'keterangan' => 'Pembelian sapu, cangkul, dan kantong sampah.',
-            'recorded_by' => $userBendahara->id,
-        ]);
-
-        /**
-         * 10. TRANSACTION (ledger kas)
-         *     type ENUM('in','out') → gunakan 'in' / 'out'
-         */
-        $saldoAwal = 0;
-        $saldo1 = $saldoAwal + 500000;
-
-        Transaction::create([
-            'tanggal' => $kasMasuk1->tanggal,
-            'type' => 'in',  // ✅ sesuai ENUM
-            'kategori' => 'Iuran Warga',
-            'kategori_id' => $kategoriIuran->id,
-            'reference_table' => 'kas',
-            'reference_id' => $kasMasuk1->id,
-            'amount' => 500000,
-            'balance_after' => $saldo1,
-            'recorded_by' => $userBendahara->id,
-            'description' => 'Setoran iuran kebersihan Januari.',
-        ]);
-
-        $saldo2 = $saldo1 - 200000;
-
-        Transaction::create([
-            'tanggal' => $kasKeluar1->tanggal,
-            'type' => 'out', // ✅ sesuai ENUM
-            'kategori' => 'Dana Kegiatan',
-            'kategori_id' => $kategoriKegiatan->id,
-            'reference_table' => 'kas',
-            'reference_id' => $kasKeluar1->id,
-            'amount' => 200000,
-            'balance_after' => $saldo2,
-            'recorded_by' => $userBendahara->id,
-            'description' => 'Pembelian peralatan kerja bakti.',
-        ]);
-
-        /**
-         * 11. PEMBAYARAN IURAN
-         */
-        $pembayaran1 = Pembayaran::create([
-            'iuran_instance_id' => $instanceJan->id,
-            'warga_id' => $warga[0]->id,
-            'tanggal_bayar' => Carbon::now()->subDays(12),
-            'amount' => 50000,
-            'metode' => 'Cash',
-            'metode_id' => $metodeCash->id,
-            'status_verifikasi' => 'terverifikasi',
-            'receipt_no' => 'IRW-2025-01-0001',
-            'proof_path' => null,
-            'recorded_by' => $userBendahara->id,
-        ]);
-
-        $pembayaran2 = Pembayaran::create([
-            'iuran_instance_id' => $instanceJan->id,
-            'warga_id' => $warga[3]->id,
-            'tanggal_bayar' => Carbon::now()->subDays(11),
-            'amount' => 50000,
-            'metode' => 'Transfer Bank',
-            'metode_id' => $metodeTransfer->id,
-            'status_verifikasi' => 'menunggu',
-            'receipt_no' => 'IRW-2025-01-0002',
-            'proof_path' => null,
-            'recorded_by' => $userBendahara->id,
-        ]);
-
-        /**
-         * 12. MUTASI WARGA
-         */
-        MutasiWarga::create([
-            'warga_id' => $warga[5]->id,
-            'jenis' => 'masuk',
-            'tanggal' => Carbon::now()->subMonths(2),
-            'keterangan' => 'Pindah dari RT lain ke RT 05.',
-        ]);
-
-        MutasiWarga::create([
-            'warga_id' => $warga[6]->id,
-            'jenis' => 'keluar',
-            'tanggal' => Carbon::now()->subMonths(1),
-            'keterangan' => 'Pindah ke luar kota.',
-        ]);
-
-        /**
-         * 13. NOTIFIKASI
-         */
-        Notifikasi::create([
-            'user_id' => $userKetua->id,
-            'judul' => 'Laporan Kas Bulanan',
-            'pesan' => 'Laporan kas bulan Januari sudah tersedia.',
-            'tipe' => 'info',
-            'data' => ['link' => route('keuangan.kas.index')],
-            'dibaca_pada' => null,
-        ]);
-
-        Notifikasi::create([
-            'user_id' => $userBendahara->id,
-            'judul' => 'Pembayaran Iuran Menunggu Verifikasi',
-            'pesan' => 'Ada pembayaran iuran yang menunggu verifikasi.',
-            'tipe' => 'tagihan',
-            'data' => ['iuran_instance_id' => $instanceJan->id],
-            'dibaca_pada' => null,
-        ]);
+        /* ===========================================================
+         * 13. NOTIFIKASI (30 notifikasi acak)
+         * =========================================================== */
+        for ($i = 0; $i < 30; $i++) {
+            Notifikasi::create([
+                'user_id' => $faker->randomElement([$userAdmin->id, $userKetua->id, $userBendahara->id]),
+                'judul' => $faker->sentence(3),
+                'pesan' => $faker->sentence(8),
+                'tipe' => $faker->randomElement(['info', 'tagihan', 'sistem']),
+                'data' => [],
+                'dibaca_pada' => rand(0, 1) ? Carbon::now() : null,
+            ]);
+        }
     }
 }

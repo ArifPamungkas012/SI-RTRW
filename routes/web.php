@@ -79,6 +79,9 @@ Route::middleware('auth')->group(function () {
         Route::delete('/warga/{warga}', [WargaController::class, 'destroy'])->name('warga.destroy');
 
         Route::post('/warga/{id}/restore', [WargaController::class, 'restore'])->name('warga.restore');
+        Route::get('/warga/{warga}/detail', [WargaController::class, 'detail'])
+            ->name('warga.detail');
+
 
 
         // ------------------ MUTASI WARGA ------------------
@@ -103,6 +106,9 @@ Route::middleware('auth')->group(function () {
         // ------------------ ANGGOTA KK ------------------
         Route::post('/kk/{kk}/anggota', [AnggotaKKController::class, 'store'])->name('kk.anggota.store');
         Route::delete('/kk/{kk}/anggota/{anggota}', [AnggotaKKController::class, 'destroy'])->name('kk.anggota.destroy');
+
+        Route::get('/kk/{kk}/detail', [KartuKeluargaController::class, 'detail'])
+            ->name('kk.detail');
     });
 
     /*

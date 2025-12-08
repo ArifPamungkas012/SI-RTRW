@@ -18,26 +18,25 @@
                 <form method="GET" action="{{ route('datawarga.warga.index') }}"
                     style="display:flex;align-items:center;gap:8px">
                     <div style="position:relative">
-                        <input name="q" value="{{ request('q') }}" placeholder="Cari nama / NIK..."
-                            style="padding:8px 12px 8px 32px;border-radius:10px;border:1px solid rgba(148,163,184,0.7);
-                                               font-size:13px;min-width:220px;outline:none;transition:border-color .18s ease" onfocus="this.style.borderColor='#10b981'"
+                        <input name="q" value="{{ request('q') }}" placeholder="Cari nama / NIK..." style="padding:8px 12px 8px 32px;border-radius:10px;border:1px solid rgba(148,163,184,0.7);
+                                          font-size:13px;min-width:220px;outline:none;transition:border-color .18s ease"
+                            onfocus="this.style.borderColor='#10b981'"
                             onblur="this.style.borderColor='rgba(148,163,184,0.7)'" />
                         <i data-lucide="search" style="width:16px;height:16px;color:#94a3b8;position:absolute;left:10px;top:50%;
-                                              transform:translateY(-50%);"></i>
+                                      transform:translateY(-50%);"></i>
                     </div>
                     <button type="submit"
                         style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:10px;
-                                               border:none;background:#0f172a;color:white;font-size:13px;font-weight:500;
-                                               cursor:pointer;box-shadow:0 6px 16px rgba(15,23,42,0.18);transition:background .18s,transform .12s">
+                                       border:none;background:#0f172a;color:white;font-size:13px;font-weight:500;
+                                       cursor:pointer;box-shadow:0 6px 16px rgba(15,23,42,0.18);transition:background .18s,transform .12s">
                         <span>Cari</span>
                     </button>
                 </form>
 
-                <button type="button" id="openCreateWargaModal"
-                        style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:10px;
-                            background:linear-gradient(135deg,#10b981,#059669);color:white;font-size:13px;
-                            font-weight:500;text-decoration:none;box-shadow:0 10px 25px rgba(16,185,129,0.35);
-                            border:none;cursor:pointer;transition:transform .12s,box-shadow .18s;">
+                <button type="button" id="openCreateWargaModal" style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:10px;
+                                   background:linear-gradient(135deg,#10b981,#059669);color:white;font-size:13px;
+                                   font-weight:500;text-decoration:none;box-shadow:0 10px 25px rgba(16,185,129,0.35);
+                                   border:none;cursor:pointer;transition:transform .12s,box-shadow .18s;">
                     <i data-lucide="plus" style="width:16px;height:16px;"></i>
                     <span>Tambah Warga</span>
                 </button>
@@ -47,16 +46,16 @@
         {{-- Flash messages --}}
         @if(session('success'))
             <div style="margin-bottom:18px;padding:10px 14px;border-radius:12px;
-                                                background:#ecfdf5;border:1px solid #bbf7d0;
-                                                color:#166534;display:flex;align-items:center;gap:8px;font-size:13px;">
+                                background:#ecfdf5;border:1px solid #bbf7d0;
+                                color:#166534;display:flex;align-items:center;gap:8px;font-size:13px;">
                 <i data-lucide="check-circle" style="width:18px;height:18px;color:#16a34a;"></i>
                 <span>{{ session('success') }}</span>
             </div>
         @endif
         @if(session('warning'))
             <div style="margin-bottom:18px;padding:10px 14px;border-radius:12px;
-                                                background:#fffbeb;border:1px solid #fef3c7;
-                                                color:#92400e;display:flex;align-items:center;gap:8px;font-size:13px;">
+                                background:#fffbeb;border:1px solid #fef3c7;
+                                color:#92400e;display:flex;align-items:center;gap:8px;font-size:13px;">
                 <i data-lucide="alert-triangle" style="width:18px;height:18px;color:#f97316;"></i>
                 <span>{{ session('warning') }}</span>
             </div>
@@ -64,7 +63,7 @@
 
         {{-- Card utama daftar warga --}}
         <div style="background:#fff;border-radius:12px;padding:0;border:1px solid rgba(2,6,23,0.04);
-                                box-shadow:0 6px 20px rgba(2,6,23,0.03);overflow:hidden;">
+                        box-shadow:0 6px 20px rgba(2,6,23,0.03);overflow:hidden;">
             <div style="overflow:auto;">
                 <table style="width:100%;border-collapse:collapse;font-size:13px;">
                     <thead style="background:#f8fafc;border-bottom:1px solid rgba(148,163,184,0.4);color:#475569;">
@@ -108,54 +107,58 @@
                                 <td style="padding:10px 18px;white-space:nowrap;">
                                     @if($warga->status_aktif)
                                         <span style="display:inline-flex;align-items:center;padding:3px 9px;
-                                                                                         border-radius:999px;font-size:11px;font-weight:600;
-                                                                                         background:#dcfce7;color:#166534;">
+                                                                 border-radius:999px;font-size:11px;font-weight:600;
+                                                                 background:#dcfce7;color:#166534;">
                                             Aktif
                                         </span>
                                     @else
                                         <span style="display:inline-flex;align-items:center;padding:3px 9px;
-                                                                                         border-radius:999px;font-size:11px;font-weight:600;
-                                                                                         background:#e5e7eb;color:#4b5563;">
+                                                                 border-radius:999px;font-size:11px;font-weight:600;
+                                                                 background:#e5e7eb;color:#4b5563;">
                                             Tidak Aktif
                                         </span>
                                     @endif
                                 </td>
                                 <td style="padding:10px 18px;white-space:nowrap;">
                                     <div style="display:flex;align-items:center;justify-content:center;gap:6px;">
-                                        <a href="{{ route('datawarga.warga.show', $warga->id) }}" title="Lihat Detail"
-                                            style="padding:6px;border-radius:10px;color:#6b7280;
-                                                                          text-decoration:none;display:inline-flex;align-items:center;
-                                                                          justify-content:center;transition:background .15s,color .15s;">
+                                        {{-- Detail (modal) --}}
+                                        <button type="button" class="btn-detail-warga"
+                                            data-detail-url="{{ route('datawarga.warga.detail', $warga->id) }}"
+                                            title="Lihat Detail" style="padding:6px;border-radius:10px;border:none;background:transparent;
+                                                               color:#6b7280;cursor:pointer;display:inline-flex;align-items:center;
+                                                               justify-content:center;transition:background .15s,color .15s;">
                                             <i data-lucide="eye" style="width:16px;height:16px;"></i>
-                                        </a>
+                                        </button>
 
-                                        <a href="{{ route('datawarga.warga.edit', $warga->id) }}" title="Edit"
-                                            style="padding:6px;border-radius:10px;color:#f59e0b;
-                                                                          text-decoration:none;display:inline-flex;align-items:center;
-                                                                          justify-content:center;transition:background .15s,color .15s;">
+                                        {{-- Edit --}}
+                                        <a href="{{ route('datawarga.warga.edit', $warga->id) }}" title="Edit" style="padding:6px;border-radius:10px;color:#f59e0b;
+                                                          text-decoration:none;display:inline-flex;align-items:center;
+                                                          justify-content:center;transition:background .15s,color .15s;">
                                             <i data-lucide="edit" style="width:16px;height:16px;"></i>
                                         </a>
 
+                                        {{-- Hapus --}}
                                         <form action="{{ route('datawarga.warga.destroy', $warga->id) }}" method="POST"
                                             onsubmit="return confirm('Hapus warga ini?')" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" title="Hapus"
                                                 style="padding:6px;border-radius:10px;border:none;background:transparent;
-                                                                                   color:#ef4444;cursor:pointer;display:inline-flex;align-items:center;
-                                                                                   justify-content:center;transition:background .15s,color .15s;">
+                                                                   color:#ef4444;cursor:pointer;display:inline-flex;align-items:center;
+                                                                   justify-content:center;transition:background .15s,color .15s;">
                                                 <i data-lucide="trash-2" style="width:16px;height:16px;"></i>
                                             </button>
                                         </form>
 
+                                        {{-- Restore (jika soft deleted) --}}
                                         @if($warga->trashed())
                                             <form action="{{ route('datawarga.warga.restore', $warga->id) }}" method="POST"
                                                 style="display:inline;">
                                                 @csrf
                                                 <button type="submit" title="Pulihkan"
                                                     style="padding:6px;border-radius:10px;border:none;background:transparent;
-                                                                                                   color:#10b981;cursor:pointer;display:inline-flex;align-items:center;
-                                                                                                   justify-content:center;transition:background .15s,color .15s;">
+                                                                           color:#10b981;cursor:pointer;display:inline-flex;align-items:center;
+                                                                           justify-content:center;transition:background .15s,color .15s;">
                                                     <i data-lucide="rotate-ccw" style="width:16px;height:16px;"></i>
                                                 </button>
                                             </form>
@@ -179,17 +182,56 @@
         </div>
 
         {{-- Pagination --}}
-        <div style="margin-top:18px;">
-            {{ $wargas->withQueryString()->links() }}
-        </div>
+        @if ($wargas->hasPages())
+            <div class="table-pagination">
+                <div class="pagination-info">
+                    Menampilkan
+                    <strong>{{ $wargas->firstItem() }}</strong>
+                    –
+                    <strong>{{ $wargas->lastItem() }}</strong>
+                    dari
+                    <strong>{{ $wargas->total() }}</strong>
+                    warga
+                </div>
+
+                <div class="pagination-nav">
+                    {{-- Tombol Sebelumnya --}}
+                    @if ($wargas->onFirstPage())
+                        <span class="page-btn disabled">Sebelumnya</span>
+                    @else
+                        <a href="{{ $wargas->previousPageUrl() }}" class="page-btn">Sebelumnya</a>
+                    @endif
+
+                    {{-- Nomor halaman (range kecil di sekitar current) --}}
+                    @php
+                        $start = max($wargas->currentPage() - 2, 1);
+                        $end = min($wargas->currentPage() + 2, $wargas->lastPage());
+                    @endphp
+
+                    @for ($page = $start; $page <= $end; $page++)
+                        @if ($page == $wargas->currentPage())
+                            <span class="page-number active">{{ $page }}</span>
+                        @else
+                            <a href="{{ $wargas->url($page) }}" class="page-number">{{ $page }}</a>
+                        @endif
+                    @endfor
+
+                    {{-- Tombol Berikutnya --}}
+                    @if ($wargas->hasMorePages())
+                        <a href="{{ $wargas->nextPageUrl() }}" class="page-btn">Berikutnya</a>
+                    @else
+                        <span class="page-btn disabled">Berikutnya</span>
+                    @endif
+                </div>
+            </div>
+        @endif
 
         {{-- MODAL TAMBAH WARGA --}}
-        <div id="createWargaModal" class="hidden"
-            style="position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;
-                    background:rgba(15,23,42,0.35);backdrop-filter:blur(3px);">
+        <div id="createWargaModal" class="hidden" style="position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;
+                        background:rgba(15,23,42,0.35);backdrop-filter:blur(3px);">
             <div style="background:#ffffff;border-radius:16px;box-shadow:0 24px 60px rgba(15,23,42,0.35);
-                        width:100%;max-width:640px;max-height:90vh;overflow:auto;padding:20px 22px;position:relative;">
-                
+                            width:100%;max-width:640px;max-height:90vh;overflow:auto;padding:20px 22px;position:relative;">
+
                 {{-- Header modal --}}
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
                     <div>
@@ -198,9 +240,8 @@
                             Isi formulir berikut untuk menambahkan data warga.
                         </p>
                     </div>
-                    <button type="button" data-close-create-modal
-                            style="width:32px;height:32px;border-radius:999px;border:none;background:#f1f5f9;
-                                display:inline-flex;align-items:center;justify-content:center;cursor:pointer;">
+                    <button type="button" data-close-create-modal style="width:32px;height:32px;border-radius:999px;border:none;background:#f1f5f9;
+                                       display:inline-flex;align-items:center;justify-content:center;cursor:pointer;">
                         <i data-lucide="x" style="width:18px;height:18px;color:#64748b;"></i>
                     </button>
                 </div>
@@ -208,8 +249,8 @@
                 {{-- Flash error khusus tambah --}}
                 @if(session('error'))
                     <div style="margin-bottom:14px;padding:10px 14px;border-radius:12px;
-                                background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;
-                                display:flex;align-items:center;gap:8px;font-size:13px;">
+                                        background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;
+                                        display:flex;align-items:center;gap:8px;font-size:13px;">
                         <i data-lucide="alert-circle" style="width:18px;height:18px;color:#ef4444;"></i>
                         <span>{{ session('error') }}</span>
                     </div>
@@ -225,10 +266,8 @@
                             <label style="display:block;font-size:13px;font-weight:600;color:#0f172a;margin-bottom:4px;">
                                 NIK <span style="color:#ef4444;">*</span>
                             </label>
-                            <input name="nik" value="{{ old('nik') }}" required
-                                placeholder="Masukkan 16 digit NIK"
-                                style="width:100%;border-radius:10px;border:1px solid #e2e8f0;padding:8px 10px;
-                                        font-size:13px;outline:none;transition:border-color .18s,box-shadow .18s;">
+                            <input name="nik" value="{{ old('nik') }}" required placeholder="Masukkan 16 digit NIK" style="width:100%;border-radius:10px;border:1px solid #e2e8f0;padding:8px 10px;
+                                              font-size:13px;outline:none;transition:border-color .18s,box-shadow .18s;">
                             @error('nik')
                                 <p style="color:#b91c1c;font-size:11px;margin-top:4px;">{{ $message }}</p>
                             @enderror
@@ -240,9 +279,8 @@
                                 Nama Lengkap <span style="color:#ef4444;">*</span>
                             </label>
                             <input name="nama" value="{{ old('nama') }}" required
-                                placeholder="Masukkan nama lengkap sesuai KTP"
-                                style="width:100%;border-radius:10px;border:1px solid #e2e8f0;padding:8px 10px;
-                                        font-size:13px;outline:none;transition:border-color .18s,box-shadow .18s;">
+                                placeholder="Masukkan nama lengkap sesuai KTP" style="width:100%;border-radius:10px;border:1px solid #e2e8f0;padding:8px 10px;
+                                              font-size:13px;outline:none;transition:border-color .18s,box-shadow .18s;">
                             @error('nama')
                                 <p style="color:#b91c1c;font-size:11px;margin-top:4px;">{{ $message }}</p>
                             @enderror
@@ -253,10 +291,9 @@
                             <label style="display:block;font-size:13px;font-weight:600;color:#0f172a;margin-bottom:4px;">
                                 Alamat Domisili
                             </label>
-                            <textarea name="alamat" rows="3"
-                                    placeholder="Alamat lengkap domisili saat ini"
-                                    style="width:100%;border-radius:10px;border:1px solid #e2e8f0;padding:8px 10px;
-                                            font-size:13px;outline:none;resize:vertical;transition:border-color .18s,box-shadow .18s;">{{ old('alamat') }}</textarea>
+                            <textarea name="alamat" rows="3" placeholder="Alamat lengkap domisili saat ini"
+                                style="width:100%;border-radius:10px;border:1px solid #e2e8f0;padding:8px 10px;
+                                                 font-size:13px;outline:none;resize:vertical;transition:border-color .18s,box-shadow .18s;">{{ old('alamat') }}</textarea>
                             @error('alamat')
                                 <p style="color:#b91c1c;font-size:11px;margin-top:4px;">{{ $message }}</p>
                             @enderror
@@ -265,52 +302,51 @@
                         {{-- No rumah / RT / RW --}}
                         <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;">
                             <div>
-                                <label style="display:block;font-size:13px;font-weight:600;color:#0f172a;margin-bottom:4px;">
+                                <label
+                                    style="display:block;font-size:13px;font-weight:600;color:#0f172a;margin-bottom:4px;">
                                     No Rumah
                                 </label>
-                                <input name="no_rumah" value="{{ old('no_rumah') }}"
-                                    style="width:100%;border-radius:10px;border:1px solid #e2e8f0;padding:8px 10px;
-                                            font-size:13px;outline:none;">
+                                <input name="no_rumah" value="{{ old('no_rumah') }}" style="width:100%;border-radius:10px;border:1px solid #e2e8f0;padding:8px 10px;
+                                                  font-size:13px;outline:none;">
                             </div>
                             <div>
-                                <label style="display:block;font-size:13px;font-weight:600;color:#0f172a;margin-bottom:4px;">
+                                <label
+                                    style="display:block;font-size:13px;font-weight:600;color:#0f172a;margin-bottom:4px;">
                                     RT
                                 </label>
-                                <input name="rt" value="{{ old('rt') }}"
-                                    style="width:100%;border-radius:10px;border:1px solid #e2e8f0;padding:8px 10px;
-                                            font-size:13px;outline:none;">
+                                <input name="rt" value="{{ old('rt') }}" style="width:100%;border-radius:10px;border:1px solid #e2e8f0;padding:8px 10px;
+                                                  font-size:13px;outline:none;">
                             </div>
                             <div>
-                                <label style="display:block;font-size:13px;font-weight:600;color:#0f172a;margin-bottom:4px;">
+                                <label
+                                    style="display:block;font-size:13px;font-weight:600;color:#0f172a;margin-bottom:4px;">
                                     RW
                                 </label>
-                                <input name="rw" value="{{ old('rw') }}"
-                                    style="width:100%;border-radius:10px;border:1px solid #e2e8f0;padding:8px 10px;
-                                            font-size:13px;outline:none;">
+                                <input name="rw" value="{{ old('rw') }}" style="width:100%;border-radius:10px;border:1px solid #e2e8f0;padding:8px 10px;
+                                                  font-size:13px;outline:none;">
                             </div>
                         </div>
 
                         {{-- No HP & Tanggal lahir --}}
                         <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;">
                             <div>
-                                <label style="display:block;font-size:13px;font-weight:600;color:#0f172a;margin-bottom:4px;">
+                                <label
+                                    style="display:block;font-size:13px;font-weight:600;color:#0f172a;margin-bottom:4px;">
                                     No HP / WhatsApp
                                 </label>
-                                <input name="no_hp" value="{{ old('no_hp') }}"
-                                    placeholder="Contoh: 08123456789"
-                                    style="width:100%;border-radius:10px;border:1px solid #e2e8f0;padding:8px 10px;
-                                            font-size:13px;outline:none;">
+                                <input name="no_hp" value="{{ old('no_hp') }}" placeholder="Contoh: 08123456789" style="width:100%;border-radius:10px;border:1px solid #e2e8f0;padding:8px 10px;
+                                                  font-size:13px;outline:none;">
                                 @error('no_hp')
                                     <p style="color:#b91c1c;font-size:11px;margin-top:4px;">{{ $message }}</p>
                                 @enderror
                             </div>
                             <div>
-                                <label style="display:block;font-size:13px;font-weight:600;color:#0f172a;margin-bottom:4px;">
+                                <label
+                                    style="display:block;font-size:13px;font-weight:600;color:#0f172a;margin-bottom:4px;">
                                     Tanggal Lahir
                                 </label>
-                                <input type="date" name="tanggal_lahir" value="{{ old('tanggal_lahir') }}"
-                                    style="width:100%;border-radius:10px;border:1px solid #e2e8f0;padding:8px 10px;
-                                            font-size:13px;outline:none;">
+                                <input type="date" name="tanggal_lahir" value="{{ old('tanggal_lahir') }}" style="width:100%;border-radius:10px;border:1px solid #e2e8f0;padding:8px 10px;
+                                                  font-size:13px;outline:none;">
                             </div>
                         </div>
 
@@ -319,10 +355,9 @@
                             <label style="display:block;font-size:13px;font-weight:600;color:#0f172a;margin-bottom:4px;">
                                 Status Aktif
                             </label>
-                            <select name="status_aktif"
-                                    style="width:100%;border-radius:10px;border:1px solid #e2e8f0;padding:8px 10px;
-                                        font-size:13px;outline:none;background:white;">
-                                <option value="1" {{ old('status_aktif','1') == '1' ? 'selected' : '' }}>Aktif</option>
+                            <select name="status_aktif" style="width:100%;border-radius:10px;border:1px solid #e2e8f0;padding:8px 10px;
+                                               font-size:13px;outline:none;background:white;">
+                                <option value="1" {{ old('status_aktif', '1') == '1' ? 'selected' : '' }}>Aktif</option>
                                 <option value="0" {{ old('status_aktif') == '0' ? 'selected' : '' }}>Tidak Aktif</option>
                             </select>
                             <p style="font-size:11px;color:#6b7280;margin-top:4px;">
@@ -333,17 +368,15 @@
 
                     {{-- Footer aksi --}}
                     <div style="margin-top:18px;padding-top:14px;border-top:1px solid #e5e7eb;
-                                display:flex;justify-content:flex-end;gap:8px;">
-                        <button type="button" data-close-create-modal
-                                style="padding:8px 14px;border-radius:10px;border:1px solid #e5e7eb;
-                                    background:white;color:#475569;font-size:13px;font-weight:500;
-                                    cursor:pointer;">
+                                    display:flex;justify-content:flex-end;gap:8px;">
+                        <button type="button" data-close-create-modal style="padding:8px 14px;border-radius:10px;border:1px solid #e5e7eb;
+                                           background:white;color:#475569;font-size:13px;font-weight:500;
+                                           cursor:pointer;">
                             Batal
                         </button>
-                        <button type="submit"
-                                style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:10px;
-                                    border:none;background:#0f172a;color:white;font-size:13px;font-weight:600;
-                                    cursor:pointer;box-shadow:0 8px 20px rgba(15,23,42,0.35);">
+                        <button type="submit" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:10px;
+                                           border:none;background:#0f172a;color:white;font-size:13px;font-weight:600;
+                                           cursor:pointer;box-shadow:0 8px 20px rgba(15,23,42,0.35);">
                             <i data-lucide="save" style="width:16px;height:16px;"></i>
                             <span>Simpan Data</span>
                         </button>
@@ -351,13 +384,41 @@
                 </form>
             </div>
         </div>
+
+        {{-- MODAL DETAIL WARGA --}}
+        <div id="detailWargaModal" class="hidden" style="position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;
+                        background:rgba(15,23,42,0.35);backdrop-filter:blur(3px);">
+            <div style="background:#ffffff;border-radius:16px;box-shadow:0 24px 60px rgba(15,23,42,0.35);
+                            width:100%;max-width:640px;max-height:90vh;overflow:auto;padding:20px 22px;position:relative;">
+
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+                    <div>
+                        <h2 style="margin:0;font-size:18px;font-weight:700;color:#0f172a;">Detail Warga</h2>
+                        <p style="margin:4px 0 0 0;font-size:13px;color:rgba(15,23,42,0.6);">
+                            Informasi lengkap data warga.
+                        </p>
+                    </div>
+                    <button type="button" data-close-detail-modal style="width:32px;height:32px;border-radius:999px;border:none;background:#f1f5f9;
+                                       display:inline-flex;align-items:center;justify-content:center;cursor:pointer;">
+                        <i data-lucide="x" style="width:18px;height:18px;color:#64748b;"></i>
+                    </button>
+                </div>
+
+                <div id="detailWargaBody" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+                                gap:14px 32px;font-size:13px;color:#4b5563;">
+                    {{-- diisi via JS --}}
+                </div>
+            </div>
+        </div>
     </div>
+
     {{-- Script modal --}}
-        <script>
+    <script>
         document.addEventListener('DOMContentLoaded', function () {
-            var openBtn  = document.getElementById('openCreateWargaModal');
-            var modal    = document.getElementById('createWargaModal');
-            var closers  = document.querySelectorAll('[data-close-create-modal]');
+            // ====== MODAL TAMBAH WARGA ======
+            var openBtn = document.getElementById('openCreateWargaModal');
+            var modal = document.getElementById('createWargaModal');
+            var closers = document.querySelectorAll('[data-close-create-modal]');
 
             if (openBtn && modal) {
                 openBtn.addEventListener('click', function () {
@@ -371,7 +432,6 @@
                 });
             });
 
-            // Klik di luar card menutup modal
             if (modal) {
                 modal.addEventListener('click', function (e) {
                     if (e.target === modal) {
@@ -380,12 +440,96 @@
                 });
             }
 
-            // Jika ada error validasi / session error -> otomatis buka modal
             @if ($errors->any() || session('error'))
                 if (modal) {
                     modal.classList.remove('hidden');
                 }
             @endif
+
+                // ====== MODAL DETAIL WARGA ======
+                var detailModal = document.getElementById('detailWargaModal');
+            var detailBody = document.getElementById('detailWargaBody');
+            var detailClosers = document.querySelectorAll('[data-close-detail-modal]');
+            var detailButtons = document.querySelectorAll('.btn-detail-warga');
+
+            detailButtons.forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    var url = this.getAttribute('data-detail-url');
+                    if (!url) return;
+
+                    fetch(url, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'application/json',
+                        }
+                    })
+                        .then(function (res) { return res.json(); })
+                        .then(function (data) {
+                            var statusBadge = data.status_aktif
+                                ? '<span style="display:inline-flex;align-items:center;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:600;background:#dcfce7;color:#166534;">Aktif</span>'
+                                : '<span style="display:inline-flex;align-items:center;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:600;background:#e5e7eb;color:#4b5563;">Tidak Aktif</span>';
+
+                            var tglLahir = data.tanggal_lahir ? data.tanggal_lahir : '-';
+
+                            detailBody.innerHTML = `
+                                    <div>
+                                        <div style="font-size:12px;color:#9ca3af;">NIK</div>
+                                        <div style="font-weight:600;color:#0f172a;">${data.nik ?? '-'}</div>
+                                    </div>
+                                    <div>
+                                        <div style="font-size:12px;color:#9ca3af;">Nama Lengkap</div>
+                                        <div style="font-weight:600;color:#0f172a;">${data.nama ?? '-'}</div>
+                                    </div>
+                                    <div>
+                                        <div style="font-size:12px;color:#9ca3af;">Alamat</div>
+                                        <div>${data.alamat ?? '-'}</div>
+                                    </div>
+                                    <div>
+                                        <div style="font-size:12px;color:#9ca3af;">RT / RW</div>
+                                        <div>${data.rt ?? '-'} / ${data.rw ?? '-'}</div>
+                                    </div>
+                                    <div>
+                                        <div style="font-size:12px;color:#9ca3af;">No Rumah</div>
+                                        <div>${data.no_rumah ?? '-'}</div>
+                                    </div>
+                                    <div>
+                                        <div style="font-size:12px;color:#9ca3af;">No HP / WhatsApp</div>
+                                        <div>${data.no_hp ?? '-'}</div>
+                                    </div>
+                                    <div>
+                                        <div style="font-size:12px;color:#9ca3af;">Tanggal Lahir</div>
+                                        <div>${tglLahir}</div>
+                                    </div>
+                                    <div>
+                                        <div style="font-size:12px;color:#9ca3af;">Status</div>
+                                        <div>${statusBadge}</div>
+                                    </div>
+                                `;
+
+                            if (detailModal) {
+                                detailModal.classList.remove('hidden');
+                            }
+                        })
+                        .catch(function (err) {
+                            console.error('Gagal memuat detail warga', err);
+                            alert('Gagal memuat detail warga.');
+                        });
+                });
+            });
+
+            detailClosers.forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    detailModal.classList.add('hidden');
+                });
+            });
+
+            if (detailModal) {
+                detailModal.addEventListener('click', function (e) {
+                    if (e.target === detailModal) {
+                        detailModal.classList.add('hidden');
+                    }
+                });
+            }
         });
-        </script>
+    </script>
 @endsection

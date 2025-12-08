@@ -4,20 +4,22 @@ namespace App\Http\Controllers\Keuangan;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Kas; // pastikan model ini ada
+use App\Models\Kas;
 
 class KasController extends Controller
 {
     /**
-     * Tampilkan daftar kas RT/RW
+     * Tampilkan hanya pemasukan kas RT/RW
      */
     public function index(Request $request)
     {
         $q = $request->get('q');
 
         $kas = Kas::query()
+            ->where('tipe', 'masuk') // ⬅️ hanya pemasukan
             ->when($q, function ($query) use ($q) {
-                $query->where('kategori', 'like', "%{$q}%")
+                $query
+                    ->where('kategori', 'like', "%{$q}%")
                     ->orWhere('keterangan', 'like', "%{$q}%");
             })
             ->orderBy('tanggal', 'desc')

@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="id">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -14,6 +15,7 @@
 
   @stack('head')
 </head>
+
 <body>
   <div class="app sidebar-state-open" id="appRoot">
     @include('layouts.sidebar')
@@ -21,14 +23,15 @@
     <div class="main">
       @include('layouts.header')
 
-      <main>
+      {{-- area konten yg bisa di-scroll --}}
+      <main class="app-main">
         @yield('content')
       </main>
     </div>
-  </div>
 
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="{{ asset('js/dashboard.js') }}"></script>
-  @stack('scripts')
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="{{ asset('js/dashboard.js') }}"></script>
+    @stack('scripts')
 </body>
+
 </html>

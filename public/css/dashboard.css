@@ -174,6 +174,13 @@ body {
     overflow: hidden;
     transition: padding 0.28s ease, margin 0.28s ease;
 }
+/* wrapper untuk @yield('content') */
+.app-main {
+    flex: 1;
+    overflow-y: auto;   /* ← scroll vertikal di sini */
+    overflow-x: hidden;
+}
+
 header.app-header {
     background: white;
     border-bottom: 1px solid rgba(15, 23, 42, 0.04);
@@ -336,4 +343,81 @@ header.app-header {
     background: rgba(16, 185, 129, 0.08);
     color: var(--accent);
     font-weight: 600;
+}
+/* PAGINATION UNTUK TABEL WARGA (dan tabel lain) */
+.table-pagination {
+    margin-top: 18px;
+    padding: 10px 16px;
+    border-radius: 12px;
+    background: #f8fafc;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.pagination-info strong {
+    color: #0f172a;
+}
+
+.pagination-nav {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.page-btn,
+.page-number {
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    font-size: 12px;
+    font-weight: 500;
+    color: #0f172a;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, box-shadow 0.15s, border-color 0.15s;
+}
+
+.page-btn:hover,
+.page-number:hover {
+    background: #0f172a;
+    color: #ffffff;
+    border-color: #0f172a;
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.18);
+}
+
+.page-number.active {
+    background: #0f172a;
+    color: #ffffff;
+    border-color: #0f172a;
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.18);
+    cursor: default;
+}
+
+.page-btn.disabled {
+    opacity: 0.4;
+    cursor: default;
+    background: #e5e7eb;
+    border-color: #e5e7eb;
+    box-shadow: none;
+}
+
+/* Responsive kecil: pagination jadi stack */
+@media (max-width: 640px) {
+    .table-pagination {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .pagination-nav {
+        flex-wrap: wrap;
+    }
 }
