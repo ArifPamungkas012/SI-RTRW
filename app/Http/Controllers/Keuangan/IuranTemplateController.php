@@ -24,7 +24,7 @@ class IuranTemplateController extends Controller
 
         // ⛔ sebelumnya: view('Keuangan.template.index')
         // ✅ sesuaikan dengan folder Blade: resources/views/keuangan/iuran/template/index.blade.php
-        return view('Keuangan.template.index', compact('templates', 'q'));
+        return view('keuangan.template.index', compact('templates', 'q'));
     }
 
     public function store(Request $request)
