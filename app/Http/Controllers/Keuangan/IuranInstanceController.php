@@ -37,7 +37,7 @@ class IuranInstanceController extends Controller
 
         // ⛔ sebelumnya: view('Keuangan.iuran.index')
         // ✅ sesuaikan dengan folder Blade: resources/views/keuangan/iuran/instance/index.blade.php
-        return view('Keuangan.iuran.index', compact(
+        return view('keuangan.iuran.index', compact(
             'instances',
             'templates',
             'q',
