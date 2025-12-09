@@ -123,9 +123,78 @@
         </div>
 
         {{-- Pagination --}}
-        <div style="margin-top:18px;">
-            {{ $kegiatans->links() }}
+        {{-- Pagination Custom --}}
+@if ($kegiatans->hasPages())
+    <div style="margin-top:18px;display:flex;align-items:center;justify-content:space-between;
+                flex-wrap:wrap;gap:12px;font-size:13px;">
+
+        {{-- Info --}}
+        <div style="color:#475569;">
+            Menampilkan
+            <strong>{{ $kegiatans->firstItem() }}</strong>
+            –
+            <strong>{{ $kegiatans->lastItem() }}</strong>
+            dari
+            <strong>{{ $kegiatans->total() }}</strong>
+            kegiatan
         </div>
+
+        {{-- Navigation --}}
+        <div style="display:flex;align-items:center;gap:6px;">
+
+            {{-- Tombol Sebelumnya --}}
+            @if ($kegiatans->onFirstPage())
+                <span style="padding:6px 10px;border-radius:8px;background:#f1f5f9;
+                             color:#94a3b8;cursor:not-allowed;">
+                    Sebelumnya
+                </span>
+            @else
+                <a href="{{ $kegiatans->previousPageUrl() }}"
+                    style="padding:6px 10px;border-radius:8px;background:#0f172a;color:white;
+                           text-decoration:none;">
+                    Sebelumnya
+                </a>
+            @endif
+
+            {{-- Nomor halaman dinamis --}}
+            @php
+                $start = max($kegiatans->currentPage() - 2, 1);
+                $end = min($kegiatans->currentPage() + 2, $kegiatans->lastPage());
+            @endphp
+
+            @for ($page = $start; $page <= $end; $page++)
+                @if ($page == $kegiatans->currentPage())
+                    <span style="padding:6px 10px;border-radius:8px;
+                                 background:#0f172a;color:white;font-weight:600;">
+                        {{ $page }}
+                    </span>
+                @else
+                    <a href="{{ $kegiatans->url($page) }}"
+                        style="padding:6px 10px;border-radius:8px;background:#f8fafc;
+                               border:1px solid #e2e8f0;color:#475569;text-decoration:none;">
+                        {{ $page }}
+                    </a>
+                @endif
+            @endfor
+
+            {{-- Tombol Berikutnya --}}
+            @if ($kegiatans->hasMorePages())
+                <a href="{{ $kegiatans->nextPageUrl() }}"
+                    style="padding:6px 10px;border-radius:8px;background:#0f172a;color:white;
+                           text-decoration:none;">
+                    Berikutnya
+                </a>
+            @else
+                <span style="padding:6px 10px;border-radius:8px;background:#f1f5f9;
+                             color:#94a3b8;cursor:not-allowed;">
+                    Berikutnya
+                </span>
+            @endif
+
+        </div>
+    </div>
+@endif
+
     </div>
 
     {{-- ============================= --}}
