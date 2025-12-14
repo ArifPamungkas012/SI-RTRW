@@ -7,14 +7,8 @@
 
         {{-- HEADER --}}
         <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px">
-            <div>
-                <h1 style="margin:0;font-size:22px;font-weight:700;color:#0f172a;">Kas RT/RW</h1>
-                <p style="margin:6px 0 0 0;font-size:13px;color:rgba(15,23,42,0.6)">
-                    Kelola pemasukan dan pengeluaran kas RT/RW.
-                </p>
-            </div>
 
-            <div style="display:flex;align-items:center;gap:12px">
+
 
                 {{-- Search --}}
                 <form method="GET" action="{{ route('keuangan.kas.index') }}"
@@ -41,7 +35,7 @@
                     <i data-lucide="plus" style="width:16px;height:16px;"></i>
                     Tambah Transaksi
                 </button>
-            </div>
+
         </div>
 
         {{-- FLASH --}}
@@ -135,9 +129,50 @@
         </div>
 
         {{-- PAGINATION --}}
-        <div style="margin-top:18px;">
-            {{ $kas->links() }}
-        </div>
+        {{-- PAGINATION --}}
+        @if ($kas->hasPages())
+            <div class="table-pagination">
+                <div class="pagination-info">
+                    Menampilkan
+                    <strong>{{ $kas->firstItem() }}</strong>
+                    –
+                    <strong>{{ $kas->lastItem() }}</strong>
+                    dari
+                    <strong>{{ $kas->total() }}</strong>
+                    transaksi
+                </div>
+
+                <div class="pagination-nav">
+                    {{-- Tombol Sebelumnya --}}
+                    @if ($kas->onFirstPage())
+                        <span class="page-btn disabled">Sebelumnya</span>
+                    @else
+                        <a href="{{ $kas->previousPageUrl() }}" class="page-btn">Sebelumnya</a>
+                    @endif
+
+                    {{-- Nomor halaman --}}
+                    @php
+                        $start = max($kas->currentPage() - 2, 1);
+                        $end = min($kas->currentPage() + 2, $kas->lastPage());
+                    @endphp
+
+                    @for ($page = $start; $page <= $end; $page++)
+                        @if ($page == $kas->currentPage())
+                            <span class="page-number active">{{ $page }}</span>
+                        @else
+                            <a href="{{ $kas->url($page) }}" class="page-number">{{ $page }}</a>
+                        @endif
+                    @endfor
+
+                    {{-- Tombol Berikutnya --}}
+                    @if ($kas->hasMorePages())
+                        <a href="{{ $kas->nextPageUrl() }}" class="page-btn">Berikutnya</a>
+                    @else
+                        <span class="page-btn disabled">Berikutnya</span>
+                    @endif
+                </div>
+            </div>
+        @endif
     </div>
 
     {{-- ============================= --}}

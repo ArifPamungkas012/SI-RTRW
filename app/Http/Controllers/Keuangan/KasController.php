@@ -24,7 +24,7 @@ class KasController extends Controller
             })
             ->orderBy('tanggal', 'desc')
             ->orderBy('id', 'desc')
-            ->paginate(10)
+            ->paginate(15)
             ->withQueryString();
 
         return view('keuangan.kas.index', compact('kas', 'q'));

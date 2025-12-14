@@ -8,60 +8,55 @@
 
         {{-- HEADER --}}
         <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px">
-            <div>
-                <h1 style="margin:0;font-size:22px;font-weight:700;color:#0f172a;">Daftar Iuran Per Periode</h1>
-                <p style="margin:6px 0 0 0;font-size:13px;color:rgba(15,23,42,0.6)">
-                    Kelola iuran yang di-generate dari template untuk setiap periode.
-                </p>
-            </div>
 
-            <div style="display:flex;align-items:center;gap:12px">
-                {{-- FILTER & SEARCH --}}
-                <form method="GET" action="{{ route('keuangan.iuran.instance.index') }}"
-                    style="display:flex;align-items:center;gap:8px">
 
-                    <div style="position:relative">
-                        <input name="q" value="{{ request('q') }}" placeholder="Cari nama template..."
-                            style="padding:8px 12px 8px 32px;border-radius:10px;border:1px solid rgba(148,163,184,0.7);
-                                                   font-size:13px;min-width:200px;outline:none;transition:border-color .18s ease" onfocus="this.style.borderColor='#10b981'"
-                            onblur="this.style.borderColor='rgba(148,163,184,0.7)'">
-                        <i data-lucide="search" style="width:16px;height:16px;color:#94a3b8;position:absolute;left:10px;top:50%;
-                                                  transform:translateY(-50%);"></i>
-                    </div>
+            {{-- FILTER & SEARCH --}}
+            <form method="GET" action="{{ route('keuangan.iuran.instance.index') }}"
+                style="display:flex;align-items:center;gap:8px">
 
-                    <input type="month" name="periode" value="{{ request('periode') }}" style="padding:8px 10px;border-radius:10px;border:1px solid rgba(148,163,184,0.7);
-                                                  font-size:13px;outline:none;">
+                <div style="position:relative">
+                    <input name="q" value="{{ request('q') }}" placeholder="Cari nama template..."
+                        style="padding:8px 12px 8px 32px;border-radius:10px;border:1px solid rgba(148,163,184,0.7);
+                                                               font-size:13px;min-width:200px;outline:none;transition:border-color .18s ease" onfocus="this.style.borderColor='#10b981'"
+                        onblur="this.style.borderColor='rgba(148,163,184,0.7)'">
+                    <i data-lucide="search" style="width:16px;height:16px;color:#94a3b8;position:absolute;left:10px;top:50%;
+                                                              transform:translateY(-50%);"></i>
+                </div>
 
-                    <select name="status" style="padding:8px 10px;border-radius:10px;border:1px solid rgba(148,163,184,0.7);
-                                                   font-size:13px;outline:none;background:white;">
-                        <option value="">Semua status</option>
-                        <option value="draft" {{ request('status') == 'draft' ? 'selected' : '' }}>Draft</option>
-                        <option value="aktif" {{ request('status') == 'aktif' ? 'selected' : '' }}>Aktif</option>
-                        <option value="ditutup" {{ request('status') == 'ditutup' ? 'selected' : '' }}>Ditutup</option>
-                    </select>
+                <input type="month" name="periode" value="{{ request('periode') }}" style="padding:8px 10px;border-radius:10px;border:1px solid rgba(148,163,184,0.7);
+                                                              font-size:13px;outline:none;">
 
-                    <button type="submit" style="padding:8px 14px;border-radius:10px;border:none;background:#0f172a;
-                                                   color:white;font-size:13px;font-weight:500;cursor:pointer;">
-                        Filter
-                    </button>
-                </form>
+                <select name="status" style="padding:8px 10px;border-radius:10px;border:1px solid rgba(148,163,184,0.7);
+                                                               font-size:13px;outline:none;background:white;">
+                    <option value="">Semua status</option>
+                    <option value="draft" {{ request('status') == 'draft' ? 'selected' : '' }}>Draft</option>
+                    <option value="aktif" {{ request('status') == 'aktif' ? 'selected' : '' }}>Aktif</option>
+                    <option value="ditutup" {{ request('status') == 'ditutup' ? 'selected' : '' }}>Ditutup</option>
+                </select>
 
-                {{-- Button Tambah Iuran Periode (Modal) --}}
-                <button id="openCreateInstanceModal" style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:10px;
-                                               background:linear-gradient(135deg,#10b981,#059669);color:white;font-size:13px;
-                                               font-weight:500;border:none;cursor:pointer;
-                                               box-shadow:0 10px 25px rgba(16,185,129,0.35);">
-                    <i data-lucide="plus" style="width:16px;height:16px;"></i>
-                    Tambah Iuran Periode
+                <button type="submit" style="padding:8px 14px;border-radius:10px;border:none;background:#0f172a;
+                                                               color:white;font-size:13px;font-weight:500;cursor:pointer;">
+                    Filter
                 </button>
-            </div>
+            </form>
+
+            {{-- Button Tambah Iuran Periode (Modal) --}}
+            <button id="openCreateInstanceModal" style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:10px;
+                                                           background:linear-gradient(135deg,#10b981,#059669);color:white;font-size:13px;
+                                                           font-weight:500;border:none;cursor:pointer;
+                                                           box-shadow:0 10px 25px rgba(16,185,129,0.35);">
+                <i data-lucide="plus" style="width:16px;height:16px;"></i>
+                Tambah Iuran Periode
+            </button>
+
         </div>
 
         {{-- FLASH --}}
         @if(session('success'))
-            <div style="margin-bottom:18px;padding:10px 14px;border-radius:12px;
-                                                            background:#ecfdf5;border:1px solid #bbf7d0;color:#166534;
-                                                            display:flex;align-items:center;gap:8px;font-size:13px;">
+            <div
+                style="margin-bottom:18px;padding:10px 14px;border-radius:12px;
+                                                                                    background:#ecfdf5;border:1px solid #bbf7d0;color:#166534;
+                                                                                    display:flex;align-items:center;gap:8px;font-size:13px;">
                 <i data-lucide="check-circle" style="width:18px;height:18px;"></i>
                 {{ session('success') }}
             </div>
@@ -69,7 +64,7 @@
 
         {{-- CARD TABLE --}}
         <div style="background:#fff;border-radius:12px;border:1px solid rgba(2,6,23,0.04);
-                                    box-shadow:0 6px 20px rgba(2,6,23,0.03);overflow:hidden;">
+                                                box-shadow:0 6px 20px rgba(2,6,23,0.03);overflow:hidden;">
             <div style="overflow-x:auto;">
                 <table style="width:100%;border-collapse:collapse;font-size:13px;">
                     <thead style="background:#f8fafc;border-bottom:1px solid rgba(148,163,184,0.4);color:#475569;">
@@ -121,7 +116,7 @@
                                     @endphp
                                     <span
                                         style="display:inline-flex;align-items:center;padding:3px 9px;border-radius:999px;
-                                                                                                 background:{{ $bg }};color:{{ $color }};font-size:11px;font-weight:600;">
+                                                                                                                         background:{{ $bg }};color:{{ $color }};font-size:11px;font-weight:600;">
                                         {{ ucfirst($status) }}
                                     </span>
                                 </td>
@@ -137,7 +132,7 @@
                                         <input type="hidden" name="status" value="ditutup">
                                         <button type="submit"
                                             style="padding:6px 10px;border-radius:8px;background:#fef3c7;border:none;
-                                                                                                       color:#92400e;font-size:12px;cursor:pointer;margin-right:4px;">
+                                                                                                                               color:#92400e;font-size:12px;cursor:pointer;margin-right:4px;">
                                             Tutup
                                         </button>
                                     </form>
@@ -148,7 +143,7 @@
                                         @method('DELETE')
                                         <button type="submit"
                                             style="padding:6px 10px;border-radius:8px;background:#fee2e2;border:none;
-                                                                                                       color:#b91c1c;font-size:12px;cursor:pointer;">
+                                                                                                                               color:#b91c1c;font-size:12px;cursor:pointer;">
                                             Hapus
                                         </button>
                                     </form>
@@ -170,19 +165,60 @@
         </div>
 
         {{-- PAGINATION --}}
-        <div style="margin-top:18px;">
-            {{ $instances->withQueryString()->links() }}
-        </div>
+        @if ($instances->hasPages())
+            <div class="table-pagination">
+                <div class="pagination-info">
+                    Menampilkan
+                    <strong>{{ $instances->firstItem() }}</strong>
+                    –
+                    <strong>{{ $instances->lastItem() }}</strong>
+                    dari
+                    <strong>{{ $instances->total() }}</strong>
+                    iuran
+                </div>
+
+                <div class="pagination-nav">
+                    {{-- Tombol Sebelumnya --}}
+                    @if ($instances->onFirstPage())
+                        <span class="page-btn disabled">Sebelumnya</span>
+                    @else
+                        <a href="{{ $instances->previousPageUrl() }}" class="page-btn">Sebelumnya</a>
+                    @endif
+
+                    {{-- Nomor halaman --}}
+                    @php
+                        $start = max($instances->currentPage() - 2, 1);
+                        $end = min($instances->currentPage() + 2, $instances->lastPage());
+                    @endphp
+
+                    @for ($page = $start; $page <= $end; $page++)
+                        @if ($page == $instances->currentPage())
+                            <span class="page-number active">{{ $page }}</span>
+                        @else
+                            <a href="{{ $instances->url($page) }}" class="page-number">{{ $page }}</a>
+                        @endif
+                    @endfor
+
+                    {{-- Tombol Berikutnya --}}
+                    @if ($instances->hasMorePages())
+                        <a href="{{ $instances->nextPageUrl() }}" class="page-btn">Berikutnya</a>
+                    @else
+                        <span class="page-btn disabled">Berikutnya</span>
+                    @endif
+                </div>
+            </div>
+        @endif
     </div>
 
     {{-- ========================= --}}
     {{-- MODAL TAMBAH --}}
     {{-- ========================= --}}
-    <div id="createInstanceModal" class="hidden" style="position:fixed;inset:0;z-index:999;background:rgba(15,23,42,0.45);
-                                backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;">
+    <div id="createInstanceModal" class="hidden"
+        style="position:fixed;inset:0;z-index:999;background:rgba(15,23,42,0.45);
+                                            backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;">
         <div
             style="background:#ffffff;border-radius:16px;width:100%;max-width:620px;
-                                    max-height:90vh;overflow:auto;padding:22px 24px;box-shadow:0 24px 60px rgba(15,23,42,0.35);">
+                                                max-height:90vh;overflow:auto;padding:22px 24px;box-shadow:0 24px 60px rgba(15,23,42,0.35);">
 
             {{-- HEADER --}}
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
@@ -192,8 +228,9 @@
                         Pilih template dan tentukan periode iuran.
                     </p>
                 </div>
-                <button type="button" id="closeCreateInstanceModal" style="width:32px;height:32px;border-radius:10px;border:none;background:#f1f5f9;
-                                               display:flex;align-items:center;justify-content:center;cursor:pointer;">
+                <button type="button" id="closeCreateInstanceModal"
+                    style="width:32px;height:32px;border-radius:10px;border:none;background:#f1f5f9;
+                                                           display:flex;align-items:center;justify-content:center;cursor:pointer;">
                     <i data-lucide="x" style="width:18px;height:18px;color:#475569;"></i>
                 </button>
             </div>
@@ -209,7 +246,7 @@
                             Template Iuran <span style="color:#ef4444">*</span>
                         </label>
                         <select name="template_id" id="templateSelect" style="width:100%;padding:8px 12px;border-radius:10px;border:1px solid #e2e8f0;
-                                                       font-size:13px;outline:none;background:white;">
+                                                                   font-size:13px;outline:none;background:white;">
                             <option value="">— Pilih Template —</option>
                             @foreach($templates as $t)
                                 <option value="{{ $t->id }}" data-nominal="{{ $t->nominal_default }}">
@@ -224,7 +261,7 @@
                             Periode <span style="color:#ef4444">*</span>
                         </label>
                         <input type="month" name="periode" required style="width:100%;padding:8px 12px;border-radius:10px;border:1px solid #e2e8f0;
-                                                      font-size:13px;outline:none;">
+                                                                  font-size:13px;outline:none;">
                     </div>
 
                     <div>
@@ -232,7 +269,7 @@
                             Jatuh Tempo <span style="color:#ef4444">*</span>
                         </label>
                         <input type="date" name="due_date" required style="width:100%;padding:8px 12px;border-radius:10px;border:1px solid #e2e8f0;
-                                                      font-size:13px;outline:none;">
+                                                                  font-size:13px;outline:none;">
                     </div>
 
                     <div>
@@ -240,7 +277,7 @@
                             Nominal <span style="color:#ef4444">*</span>
                         </label>
                         <input type="number" name="nominal" id="nominalInput" required style="width:100%;padding:8px 12px;border-radius:10px;border:1px solid #e2e8f0;
-                                                      font-size:13px;outline:none;">
+                                                                  font-size:13px;outline:none;">
                         <p style="margin-top:4px;font-size:11px;color:#6b7280;">
                             Nominal default akan terisi otomatis berdasarkan template, namun bisa diubah jika perlu.
                         </p>
@@ -251,7 +288,7 @@
                             Status Awal
                         </label>
                         <select name="status" style="width:100%;padding:8px 12px;border-radius:10px;border:1px solid #e2e8f0;
-                                                       font-size:13px;outline:none;background:white;">
+                                                                   font-size:13px;outline:none;background:white;">
                             <option value="draft">Draft</option>
                             <option value="aktif">Aktif</option>
                         </select>
@@ -260,14 +297,15 @@
 
                 {{-- FOOTER --}}
                 <div style="margin-top:18px;padding-top:14px;border-top:1px solid #e5e7eb;
-                                            display:flex;justify-content:flex-end;gap:10px;">
-                    <button type="button" id="closeCreateInstanceModal2" style="padding:8px 14px;border-radius:10px;border:1px solid #e2e8f0;
-                                                   background:white;color:#475569;font-size:13px;cursor:pointer;">
+                                                        display:flex;justify-content:flex-end;gap:10px;">
+                    <button type="button" id="closeCreateInstanceModal2"
+                        style="padding:8px 14px;border-radius:10px;border:1px solid #e2e8f0;
+                                                               background:white;color:#475569;font-size:13px;cursor:pointer;">
                         Batal
                     </button>
                     <button type="submit" style="padding:9px 18px;border-radius:10px;border:none;background:#0f172a;
-                                                   color:white;font-size:13px;font-weight:600;cursor:pointer;
-                                                   box-shadow:0 8px 20px rgba(15,23,42,0.35);">
+                                                               color:white;font-size:13px;font-weight:600;cursor:pointer;
+                                                               box-shadow:0 8px 20px rgba(15,23,42,0.35);">
                         Simpan Iuran Periode
                     </button>
                 </div>

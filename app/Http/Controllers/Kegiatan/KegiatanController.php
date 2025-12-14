@@ -19,7 +19,8 @@ class KegiatanController extends Controller
                 ->orWhere('jenis', 'like', "%$q%");
         })
             ->orderBy('tanggal', 'desc')
-            ->paginate(10);
+            ->paginate(15)
+            ->withQueryString();
 
         $users = User::select('id', 'name')->get();
 

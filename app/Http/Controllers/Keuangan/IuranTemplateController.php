@@ -19,7 +19,7 @@ class IuranTemplateController extends Controller
             });
         })
             ->orderBy('created_at', 'desc')
-            ->paginate(10)
+            ->paginate(15)
             ->appends($request->only(['q']));
 
         // ⛔ sebelumnya: view('Keuangan.template.index')

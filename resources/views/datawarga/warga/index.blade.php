@@ -7,14 +7,8 @@
     <div class="content">
         {{-- Header halaman --}}
         <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px">
-            <div>
-                <h1 style="margin:0;font-size:22px;font-weight:700;color:#0f172a;">Daftar Warga</h1>
-                <p style="margin:6px 0 0 0;font-size:13px;color:rgba(15,23,42,0.6)">
-                    Kelola data penduduk RT / RW
-                </p>
-            </div>
 
-            <div style="display:flex;align-items:center;gap:12px">
+
                 <form method="GET" action="{{ route('datawarga.warga.index') }}"
                     style="display:flex;align-items:center;gap:8px">
                     <div style="position:relative">
@@ -40,7 +34,7 @@
                     <i data-lucide="plus" style="width:16px;height:16px;"></i>
                     <span>Tambah Warga</span>
                 </button>
-            </div>
+
         </div>
 
         {{-- Flash messages --}}

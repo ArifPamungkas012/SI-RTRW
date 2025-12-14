@@ -7,11 +7,6 @@
     <div>
       <div style="display:flex;align-items:center;gap:10px">
         <h2 style="margin:0;font-size:20px;font-weight:700;color:#0f172a">@yield('title', 'Dashboard')</h2>
-        <span style="font-size:12px;color:rgba(2,6,23,0.45);background:#f1f5f9;padding:6px 10px;border-radius:999px">RT
-          05 / RW 03</span>
-      </div>
-      <div style="font-size:13px;color:rgba(2,6,23,0.6);margin-top:6px;display:flex;align-items:center;gap:8px;">
-        <i data-lucide="map-pin" class="w-4 h-4"></i> Kelurahan Kebayoran, Jakarta Selatan
       </div>
     </div>
   </div>
@@ -36,7 +31,7 @@
       <div style="font-size:13px;display:flex;align-items:center;gap:8px;">
         <div>
           <div style="font-weight:600;color:#0f172a">{{ Auth::user()->name ?? 'Nama Pengguna' }}</div>
-          <div style="font-size:12px;color:rgba(2,6,23,0.5)">{{ Auth::user()->role ?? 'Warga' }}</div>
+          <div style="font-size:12px;color:rgba(2,6,23,0.5)">{{ Auth::user()->role?->label ?? 'Warga' }}</div>
         </div>
 
         {{-- Dropdown toggle --}}

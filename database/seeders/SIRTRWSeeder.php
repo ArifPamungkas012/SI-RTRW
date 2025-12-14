@@ -8,6 +8,7 @@ use Carbon\Carbon;
 
 // Models
 use App\Models\{
+    Role,
     Warga,
     User,
     KartuKeluarga,
@@ -46,7 +47,17 @@ class SIRTRWSeeder extends Seeder
         );
 
         /* ===========================================================
-         * 2. MASTER KATEGORI KEUANGAN
+         * 2. ROLES
+         * =========================================================== */
+        $roleAdmin = Role::firstOrCreate(['name' => 'admin'], ['label' => 'Administrator', 'description' => 'Akses penuh sistem']);
+        $roleKetua = Role::firstOrCreate(['name' => 'ketua_rt'], ['label' => 'Ketua RT', 'description' => 'Akses manajemen warga dan laporan']);
+        $roleBendahara = Role::firstOrCreate(['name' => 'bendahara'], ['label' => 'Bendahara', 'description' => 'Akses manajemen keuangan']);
+        $roleWarga = Role::firstOrCreate(['name' => 'warga'], ['label' => 'Warga', 'description' => 'Akses terbatas warga']);
+        // Optional: Sekretaris if needed
+        $roleSekretaris = Role::firstOrCreate(['name' => 'sekretaris'], ['label' => 'Sekretaris', 'description' => 'Akses surat menyurat']);
+
+        /* ===========================================================
+         * 3. MASTER KATEGORI KEUANGAN
          * =========================================================== */
         $kategori = [
             ['IRW', 'Iuran Rutin Warga', 'masuk'],
@@ -65,7 +76,7 @@ class SIRTRWSeeder extends Seeder
         }
 
         /* ===========================================================
-         * 3. METODE PEMBAYARAN
+         * 4. METODE PEMBAYARAN
          * =========================================================== */
         $metodes = ['Cash', 'Transfer Bank', 'E-Wallet', 'QRIS', 'VA Bank BCA'];
         $metodeMap = [];
@@ -77,34 +88,87 @@ class SIRTRWSeeder extends Seeder
         }
 
         /* ===========================================================
-         * 4. DATA WARGA (40 ORANG)
+         * 5. DATA WARGA (40 ORANG)
          * =========================================================== */
         $warga = collect();
-        for ($i = 0; $i < 40; $i++) {
+        // Create specific warga for users first to ensure consistency
+        $wargaAdmin = Warga::create([
+            'nik' => $faker->unique()->numerify('3273##########'),
+            'nama' => 'Bapak Admin',
+            'alamat' => 'Jl. Melati No. 1',
+            'no_rumah' => '1',
+            'rt' => '05',
+            'rw' => '03',
+            // 'jenis_kelamin' => 'Laki-laki',
+            // 'status_pernikahan' => 'Menikah',
+            // 'tempat_lahir' => 'Bandung',
+            'tanggal_lahir' => '1980-01-01',
+            'no_hp' => $faker->phoneNumber(),
+            'status_aktif' => 1
+        ]);
+        $warga->push($wargaAdmin);
+
+        $wargaKetua = Warga::create([
+            'nik' => $faker->unique()->numerify('3273##########'),
+            'nama' => 'Bapak Ketua RT',
+            'alamat' => 'Jl. Melati No. 2',
+            'no_rumah' => '2',
+            'rt' => '05',
+            'rw' => '03',
+            // 'jenis_kelamin' => 'Laki-laki',
+            // 'status_pernikahan' => 'Menikah',
+            // 'tempat_lahir' => 'Jakarta',
+            'tanggal_lahir' => '1975-05-15',
+            'no_hp' => $faker->phoneNumber(),
+            'status_aktif' => 1
+        ]);
+        $warga->push($wargaKetua);
+
+        $wargaBendahara = Warga::create([
+            'nik' => $faker->unique()->numerify('3273##########'),
+            'nama' => 'Ibu Bendahara',
+            'alamat' => 'Jl. Melati No. 3',
+            'no_rumah' => '3',
+            'rt' => '05',
+            'rw' => '03',
+            // 'jenis_kelamin' => 'Perempuan',
+            // 'status_pernikahan' => 'Menikah',
+            // 'tempat_lahir' => 'Surabaya',
+            'tanggal_lahir' => '1985-08-20',
+            'no_hp' => $faker->phoneNumber(),
+            'status_aktif' => 1
+        ]);
+        $warga->push($wargaBendahara);
+
+        // Random Warga
+        for ($i = 0; $i < 37; $i++) {
             $warga->push(Warga::create([
                 'nik' => $faker->unique()->numerify('3273##########'),
                 'nama' => $faker->name(),
-                'alamat' => 'Jl. Melati No. ' . $faker->numberBetween(1, 40),
-                'no_rumah' => (string) $faker->numberBetween(1, 40),
+                'alamat' => 'Jl. Melati No. ' . $faker->numberBetween(4, 50),
+                'no_rumah' => (string) $faker->numberBetween(4, 50),
                 'rt' => '05',
                 'rw' => '03',
+                // 'jenis_kelamin' => $faker->randomElement(['Laki-laki', 'Perempuan']),
+                // 'status_pernikahan' => $faker->randomElement(['Belum Menikah', 'Menikah', 'Cerai']),
+                // 'tempat_lahir' => $faker->city(),
+                'tanggal_lahir' => $faker->dateTimeBetween('-60 years', '-17 years'),
                 'no_hp' => $faker->phoneNumber(),
-                'tanggal_lahir' => $faker->dateTimeBetween('-70 years', '-17 years'),
                 'status_aktif' => 1
             ]));
         }
 
         /* ===========================================================
-         * 5. USERS (admin, ketua, bendahara)
+         * 6. USERS
          * =========================================================== */
         $userAdmin = User::updateOrCreate(
             ['username' => 'admin'],
             [
-                'name' => 'Admin RT',
+                'name' => 'Administrator',
                 'email' => 'admin@example.com',
                 'password' => Hash::make('password'),
-                'role' => 'admin',
-                'warga_id' => $warga[0]->id,
+                'role_id' => $roleAdmin->id,
+                'warga_id' => $wargaAdmin->id,
             ]
         );
 
@@ -114,8 +178,8 @@ class SIRTRWSeeder extends Seeder
                 'name' => 'Ketua RT',
                 'email' => 'ketua@example.com',
                 'password' => Hash::make('password'),
-                'role' => 'pengurus',
-                'warga_id' => $warga[1]->id,
+                'role_id' => $roleKetua->id,
+                'warga_id' => $wargaKetua->id,
             ]
         );
 
@@ -125,39 +189,74 @@ class SIRTRWSeeder extends Seeder
                 'name' => 'Bendahara RT',
                 'email' => 'bendahara@example.com',
                 'password' => Hash::make('password'),
-                'role' => 'bendahara',
-                'warga_id' => $warga[2]->id,
+                'role_id' => $roleBendahara->id,
+                'warga_id' => $wargaBendahara->id,
             ]
         );
 
+        // Dummy user warga (some of them)
+        foreach ($warga->slice(3, 5) as $w) {
+            User::create([
+                'username' => strtolower(str_replace(' ', '', $w->nama)),
+                'name' => $w->nama,
+                'email' => strtolower(str_replace(' ', '.', $w->nama)) . '@example.com',
+                'password' => Hash::make('password'),
+                'role_id' => $roleWarga->id,
+                'warga_id' => $w->id,
+            ]);
+        }
+
         /* ===========================================================
-         * 6. KARTU KELUARGA (15 KK)
+         * 7. KARTU KELUARGA (15 KK)
          * =========================================================== */
         $kkList = collect();
-        for ($i = 0; $i < 15; $i++) {
+        // Create KK for Admin, Ketua, Bendahara first
+        $keyPeople = [$wargaAdmin, $wargaKetua, $wargaBendahara];
+        foreach ($keyPeople as $kp) {
             $kk = KartuKeluarga::create([
                 'no_kk' => '3273' . $faker->numerify('##########'),
-                'alamat' => 'Jl. Melati No. ' . $faker->numberBetween(1, 40),
+                'alamat' => $kp->alamat,
                 'rt' => '05',
                 'rw' => '03',
-                'kepala_keluarga' => $warga[$i]->nama,
+                'kepala_keluarga' => $kp->nama,
+                'tanggal_dibuat' => Carbon::now()->subYears(rand(1, 5)),
+            ]);
+            $kkList->push($kk);
+
+            // Link Warga to KK as Kepala Keluarga
+            AnggotaKK::create(['kk_id' => $kk->id, 'warga_id' => $kp->id, 'hubungan' => 'Kepala Keluarga']);
+        }
+
+        // Random KKs
+        for ($i = 0; $i < 12; $i++) {
+            $remainingWarga = $warga->whereNotIn('id', AnggotaKK::pluck('warga_id'))->values();
+            if ($remainingWarga->isEmpty())
+                break;
+
+            $head = $remainingWarga->first();
+
+            $kk = KartuKeluarga::create([
+                'no_kk' => '3273' . $faker->numerify('##########'),
+                'alamat' => $head->alamat,
+                'rt' => '05',
+                'rw' => '03',
+                'kepala_keluarga' => $head->nama,
                 'tanggal_dibuat' => Carbon::now()->subYears(rand(1, 10)),
             ]);
             $kkList->push($kk);
 
-            // Set 2–4 anggota per KK
-            $jumlahAnggota = rand(2, 4);
-            for ($j = 0; $j < $jumlahAnggota; $j++) {
-                AnggotaKK::create([
-                    'kk_id' => $kk->id,
-                    'warga_id' => $warga->random()->id,
-                    'hubungan' => $j == 0 ? 'Kepala Keluarga' : $faker->randomElement(['Istri', 'Anak', 'Saudara']),
-                ]);
+            // Add head
+            AnggotaKK::create(['kk_id' => $kk->id, 'warga_id' => $head->id, 'hubungan' => 'Kepala Keluarga']);
+
+            // Add members
+            $members = $remainingWarga->slice(1, rand(1, 3));
+            foreach ($members as $m) {
+                AnggotaKK::create(['kk_id' => $kk->id, 'warga_id' => $m->id, 'hubungan' => $faker->randomElement(['Istri', 'Anak', 'Famili Lain'])]);
             }
         }
 
         /* ===========================================================
-         * 7. KEGIATAN (20 kegiatan)
+         * 8. KEGIATAN (20 kegiatan)
          * =========================================================== */
         $kegiatanList = collect();
 
@@ -186,7 +285,7 @@ class SIRTRWSeeder extends Seeder
         }
 
         /* ===========================================================
-         * 8. IURAN TEMPLATE (6 template)
+         * 9. IURAN TEMPLATE (6 template)
          * =========================================================== */
         $templates = collect();
         $templateNames = [
@@ -208,7 +307,7 @@ class SIRTRWSeeder extends Seeder
         }
 
         /* ===========================================================
-         * 9. IURAN INSTANCES (12 bulan × 6 template)
+         * 10. IURAN INSTANCES (12 bulan × 6 template)
          * =========================================================== */
         $instances = collect();
         foreach ($templates as $template) {
@@ -226,9 +325,8 @@ class SIRTRWSeeder extends Seeder
         }
 
         /* ===========================================================
-         * 10. KAS (50 entri)
+         * 11. KAS (50 entri)
          * =========================================================== */
-        $kasList = collect();
         $saldo = 0;
 
         for ($i = 0; $i < 50; $i++) {
@@ -240,7 +338,7 @@ class SIRTRWSeeder extends Seeder
                 'tanggal' => Carbon::now()->subDays(rand(1, 120)),
                 'tipe' => $isMasuk ? 'masuk' : 'keluar',
                 'kategori' => $faker->randomElement(['Iuran Warga', 'Dana Sosial', 'Kegiatan']),
-                'kategori_id' => $kategoriMap['IRW']->id,
+                'kategori_id' => $kategoriMap['IRW']->id, // Simplified
                 'nominal' => $nominal,
                 'keterangan' => $faker->sentence(),
                 'recorded_by' => $userBendahara->id,
@@ -261,7 +359,7 @@ class SIRTRWSeeder extends Seeder
         }
 
         /* ===========================================================
-         * 11. PEMBAYARAN IURAN (150 entri acak)
+         * 12. PEMBAYARAN IURAN (150 entri acak)
          * =========================================================== */
         for ($i = 0; $i < 150; $i++) {
             $inst = $instances->random();
@@ -283,7 +381,7 @@ class SIRTRWSeeder extends Seeder
         }
 
         /* ===========================================================
-         * 12. MUTASI WARGA (20 entri)
+         * 13. MUTASI WARGA (20 entri)
          * =========================================================== */
         for ($i = 0; $i < 20; $i++) {
             MutasiWarga::create([
@@ -295,16 +393,86 @@ class SIRTRWSeeder extends Seeder
         }
 
         /* ===========================================================
-         * 13. NOTIFIKASI (30 notifikasi acak)
+         * 14. NOTIFIKASI (30 notifikasi acak)
          * =========================================================== */
+        $usersForNotif = [$userAdmin->id, $userKetua->id, $userBendahara->id];
         for ($i = 0; $i < 30; $i++) {
             Notifikasi::create([
-                'user_id' => $faker->randomElement([$userAdmin->id, $userKetua->id, $userBendahara->id]),
+                'user_id' => $faker->randomElement($usersForNotif),
                 'judul' => $faker->sentence(3),
                 'pesan' => $faker->sentence(8),
                 'tipe' => $faker->randomElement(['info', 'tagihan', 'sistem']),
-                'data' => [],
+                'data' => json_encode(['foo' => 'bar']), // Need json string for text/json column
                 'dibaca_pada' => rand(0, 1) ? Carbon::now() : null,
+            ]);
+        }
+
+        /* ===========================================================
+         * 15. SURPLUS DATA (JAN-JUL)
+         * =========================================================== */
+        // Guaranteed surplus for Jan - Jul
+        // We use $kategoriMap from section 3 and $userBendahara from section 6
+        for ($m = 1; $m <= 7; $m++) {
+            // Create a fixed date: 10th of each month in 2025
+            $dateIn = Carbon::create(2025, $m, 10);
+            $dateOut = Carbon::create(2025, $m, 15);
+
+            // 1. Income (Large) ~ 15-20jt
+            $nominalIn = rand(15000000, 20000000);
+
+            // Perbarui saldo (running balance simulation or just placeholder)
+            if (!isset($saldo))
+                $saldo = 0;
+            $saldo += $nominalIn;
+
+            $kasIn = Kas::create([
+                'tanggal' => $dateIn,
+                'tipe' => 'masuk',
+                'kategori' => 'Donasi Surplus',
+                'kategori_id' => $kategoriMap['DAR']->id ?? 1, // Fallback if key missing
+                'nominal' => $nominalIn,
+                'keterangan' => 'Donasi Warga Bulanan (Surplus)',
+                'recorded_by' => $userBendahara->id,
+            ]);
+
+            Transaction::create([
+                'tanggal' => $kasIn->tanggal,
+                'type' => 'in',
+                'kategori' => $kasIn->kategori,
+                'kategori_id' => $kasIn->kategori_id,
+                'reference_table' => 'kas',
+                'reference_id' => $kasIn->id,
+                'amount' => $nominalIn,
+                'balance_after' => $saldo,
+                'recorded_by' => $userBendahara->id,
+                'description' => $kasIn->keterangan
+            ]);
+
+            // 2. Expense (Small) ~ 3-5jt
+            $nominalOut = rand(3000000, 5000000);
+            $saldo -= $nominalOut;
+
+            $kasOut = Kas::create([
+                'tanggal' => $dateOut,
+                'tipe' => 'keluar',
+                'kategori' => 'Operasional Rutin',
+                'kategori_id' => $kategoriMap['KGN']->id ?? 2, // Fallback
+                'nominal' => $nominalOut,
+                'keterangan' => 'Biaya Operasional & Kegiatan Bulanan',
+                'recorded_by' => $userBendahara->id,
+            ]);
+
+            Transaction::create([
+                'tanggal' => $kasOut->tanggal,
+                'type' => 'out',
+                'kategori' => $kasOut->kategori,
+                'kategori_id' => $kasOut->kategori_id,
+                'reference_table' => 'kas',
+                'reference_id' => $kasOut->id,
+                'amount' => $nominalOut,
+                'balance_after' => $saldo,
+                'recorded_by' => $userBendahara->id,
+                'description' => $kasOut->keterangan
             ]);
         }
     }

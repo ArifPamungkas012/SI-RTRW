@@ -22,6 +22,8 @@ use App\Http\Controllers\Keuangan\PengeluaranController;
 use App\Http\Controllers\Keuangan\KategoriKeuanganController;
 use App\Http\Controllers\Keuangan\MetodePembayaranController;
 
+use App\Http\Controllers\Laporan\LaporanWargaController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -55,8 +57,27 @@ Route::middleware('auth')->group(function () {
     */
     Route::prefix('account')->name('account.')->group(function () {
         Route::get('/profile', [AccountController::class, 'profile'])->name('profile');
+        Route::put('/profile', [AccountController::class, 'updateProfile'])->name('profile.update');
+
         Route::get('/settings', [AccountController::class, 'settings'])->name('settings');
+        Route::put('/settings/password', [AccountController::class, 'updatePassword'])->name('settings.password');
+
         Route::get('/me-json', [AccountController::class, 'meJson'])->name('me.json');
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | ADMINISTRASI (Hanya Admin & Ketua RT)
+    |--------------------------------------------------------------------------
+    */
+    Route::middleware(['role:admin,ketua_rt'])->prefix('administrasi')->name('administrasi.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Administrasi\DashboardController::class, 'index'])->name('index');
+
+        // Role Management
+        Route::resource('roles', \App\Http\Controllers\Administrasi\RoleController::class)->except(['create', 'edit', 'show']);
+
+        // User Management
+        Route::resource('users', \App\Http\Controllers\Administrasi\UserController::class);
     });
 
     /*
@@ -64,7 +85,7 @@ Route::middleware('auth')->group(function () {
     | Data Warga Module
     |--------------------------------------------------------------------------
     */
-    Route::prefix('datawarga')->name('datawarga.')->group(function () {
+    Route::middleware(['role:admin,ketua_rt'])->prefix('datawarga')->name('datawarga.')->group(function () {
 
         // ------------------ WARGA ------------------
         Route::get('/warga', [WargaController::class, 'index'])->name('warga.index');
@@ -116,7 +137,7 @@ Route::middleware('auth')->group(function () {
     | KEGIATAN
     |--------------------------------------------------------------------------
     */
-    Route::prefix('kegiatan')->name('kegiatan.')->group(function () {
+    Route::middleware(['role:admin,ketua_rt,bendahara,warga'])->prefix('kegiatan')->name('kegiatan.')->group(function () {
         Route::get('/', [KegiatanController::class, 'index'])->name('index');
         Route::post('/', [KegiatanController::class, 'store'])->name('store');
         Route::put('/{id}', [KegiatanController::class, 'update'])->name('update');
@@ -126,7 +147,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/riwayat', [RiwayatKegiatanController::class, 'index'])->name('riwayat.index');
     });
 
-    Route::prefix('keuangan')->name('keuangan.')->group(function () {
+    /*
+    |--------------------------------------------------------------------------
+    | KEUANGAN
+    |--------------------------------------------------------------------------
+    */
+    Route::middleware(['role:admin,ketua_rt,bendahara'])->prefix('keuangan')->name('keuangan.')->group(function () {
         // KAS
         Route::get('/kas', [KasController::class, 'index'])->name('kas.index');
         Route::post('/kas', [KasController::class, 'store'])->name('kas.store');
@@ -172,6 +198,63 @@ Route::middleware('auth')->group(function () {
                 Route::post('/{id}/restore', [IuranInstanceController::class, 'restore'])->name('restore');
             });
         });
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | LAPORAN
+    |--------------------------------------------------------------------------
+    */
+    Route::middleware(['role:admin,ketua_rt,bendahara,warga'])->prefix('laporan')->name('laporan.')->group(function () {
+
+        Route::get('warga', [LaporanWargaController::class, 'index'])
+            ->name('warga.index');
+
+        Route::get('warga/export/pdf', [LaporanWargaController::class, 'exportPdf'])
+            ->name('warga.export.pdf');
+
+        Route::get('warga/export/excel', [LaporanWargaController::class, 'exportExcel'])
+            ->name('warga.export.excel');
+
+        // Laporan Keuangan
+        Route::get('keuangan', [\App\Http\Controllers\Laporan\LaporanKeuanganController::class, 'index'])
+            ->name('keuangan.index');
+
+        Route::get('keuangan/export/pdf', [\App\Http\Controllers\Laporan\LaporanKeuanganController::class, 'exportPdf'])
+            ->name('keuangan.export.pdf');
+
+        Route::get('keuangan/export/excel', [\App\Http\Controllers\Laporan\LaporanKeuanganController::class, 'exportExcel'])
+            ->name('keuangan.export.excel');
+
+        // Laporan Kegiatan
+        Route::get('kegiatan', [\App\Http\Controllers\Laporan\LaporanKegiatanController::class, 'index'])
+            ->name('kegiatan.index');
+
+        Route::get('kegiatan/export/pdf', [\App\Http\Controllers\Laporan\LaporanKegiatanController::class, 'exportPdf'])
+            ->name('kegiatan.export.pdf');
+
+        Route::get('kegiatan/export/excel', [\App\Http\Controllers\Laporan\LaporanKegiatanController::class, 'exportExcel'])
+            ->name('kegiatan.export.excel');
+
+        // Laporan Iuran
+        Route::get('iuran', [\App\Http\Controllers\Laporan\LaporanIuranController::class, 'index'])
+            ->name('iuran.index');
+
+        Route::get('iuran/export/pdf', [\App\Http\Controllers\Laporan\LaporanIuranController::class, 'exportPdf'])
+            ->name('iuran.export.pdf');
+
+        Route::get('iuran/export/excel', [\App\Http\Controllers\Laporan\LaporanIuranController::class, 'exportExcel'])
+            ->name('iuran.export.excel');
+
+        // Laporan Mutasi Warga
+        Route::get('mutasi', [\App\Http\Controllers\Laporan\LaporanMutasiWargaController::class, 'index'])
+            ->name('mutasi.index');
+
+        Route::get('mutasi/export/pdf', [\App\Http\Controllers\Laporan\LaporanMutasiWargaController::class, 'exportPdf'])
+            ->name('mutasi.export.pdf');
+
+        Route::get('mutasi/export/excel', [\App\Http\Controllers\Laporan\LaporanMutasiWargaController::class, 'exportExcel'])
+            ->name('mutasi.export.excel');
     });
 
 

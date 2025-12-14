@@ -16,7 +16,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role',
+        'role_id',   // new
         'warga_id',
     ];
 
@@ -29,6 +29,13 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Warga::class, 'warga_id');
     }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'role_id');
+    }
+
+
 
     public function kasDicatat()
     {

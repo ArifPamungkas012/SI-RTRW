@@ -30,7 +30,7 @@ class IuranInstanceController extends Controller
             })
             ->orderBy('periode', 'desc')
             ->orderBy('due_date', 'asc')
-            ->paginate(10)
+            ->paginate(15)
             ->appends($request->only(['q', 'status', 'periode'])); // supaya paginasi tetap bawa filter
 
         $templates = IuranTemplate::orderBy('nama')->get();

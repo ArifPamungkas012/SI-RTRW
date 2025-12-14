@@ -16,68 +16,72 @@
       <div class="label sidebar-label" data-href="{{ route('dashboard') }}">Dashboard</div>
     </div>
 
-    {{-- DATA WARGA --}}
-    <div>
-      <div class="menu-item {{ request()->routeIs('datawarga.*') ? 'active' : '' }}" data-menu="warga"
-        data-has-submenu="true" data-submenu="submenu-warga" type="button" data-href="">
-        <div class="icon"><i data-lucide="users" class="w-5 h-5"></i></div>
-        <div class="label sidebar-label">Data Warga</div>
-      </div>
-      <div id="submenu-warga" class="sidebar-submenu hidden">
-        <div class="submenu-item {{ request()->routeIs('datawarga.warga.index') ? 'active' : '' }}"
-          data-menu="daftar-warga" data-href="{{ route('datawarga.warga.index') }}">
-          Daftar Warga
+    {{-- DATA WARGA (Admin & Ketua RT) --}}
+    @if(in_array(auth()->user()->role->name ?? '', ['admin', 'ketua_rt']))
+      <div>
+        <div class="menu-item {{ request()->routeIs('datawarga.*') ? 'active' : '' }}" data-menu="warga"
+          data-has-submenu="true" data-submenu="submenu-warga" type="button" data-href="">
+          <div class="icon"><i data-lucide="users" class="w-5 h-5"></i></div>
+          <div class="label sidebar-label">Data Warga</div>
         </div>
-        <div class="submenu-item {{ request()->routeIs('datawarga.kk.index') ? 'active' : '' }}"
-          data-menu="kartu-keluarga" data-href="{{ route('datawarga.kk.index') }}">
-          Kartu Keluarga
-        </div>
+        <div id="submenu-warga" class="sidebar-submenu hidden">
+          <div class="submenu-item {{ request()->routeIs('datawarga.warga.index') ? 'active' : '' }}"
+            data-menu="daftar-warga" data-href="{{ route('datawarga.warga.index') }}">
+            Daftar Warga
+          </div>
+          <div class="submenu-item {{ request()->routeIs('datawarga.kk.index') ? 'active' : '' }}"
+            data-menu="kartu-keluarga" data-href="{{ route('datawarga.kk.index') }}">
+            Kartu Keluarga
+          </div>
 
-        {{-- Tambahan: Mutasi Warga (struktur untuk histori mutasi) --}}
-        <div class="submenu-item {{ request()->routeIs('datawarga.mutasi.index') ? 'active' : '' }}"
-          data-menu="mutasi-warga" data-href="{{ route('datawarga.mutasi.index') }}">
-          Mutasi Warga
+          {{-- Tambahan: Mutasi Warga (struktur untuk histori mutasi) --}}
+          <div class="submenu-item {{ request()->routeIs('datawarga.mutasi.index') ? 'active' : '' }}"
+            data-menu="mutasi-warga" data-href="{{ route('datawarga.mutasi.index') }}">
+            Mutasi Warga
+          </div>
         </div>
       </div>
-    </div>
+    @endif
 
-    {{-- KEUANGAN --}}
-    <div>
-      <div class="menu-item {{ request()->routeIs('keuangan.*') ? 'active' : '' }}" data-menu="keuangan"
-        data-has-submenu="true" data-submenu="submenu-keuangan" type="button" data-href="">
-        <div class="icon"><i data-lucide="wallet" class="w-5 h-5"></i></div>
-        <div class="label sidebar-label">Keuangan</div>
-      </div>
-      <div id="submenu-keuangan" class="sidebar-submenu hidden">
-        <div class="submenu-item {{ request()->routeIs('keuangan.iuran.template.index') ? 'active' : '' }}"
-          data-menu="iuran-template" data-href="{{ route('keuangan.iuran.template.index') }}">
-          Template Iuran
+    {{-- KEUANGAN (Admin, Ketua RT, Bendahara) --}}
+    @if(in_array(auth()->user()->role->name ?? '', ['admin', 'ketua_rt', 'bendahara']))
+      <div>
+        <div class="menu-item {{ request()->routeIs('keuangan.*') ? 'active' : '' }}" data-menu="keuangan"
+          data-has-submenu="true" data-submenu="submenu-keuangan" type="button" data-href="">
+          <div class="icon"><i data-lucide="wallet" class="w-5 h-5"></i></div>
+          <div class="label sidebar-label">Keuangan</div>
         </div>
-        <div class="submenu-item {{ request()->routeIs('keuangan.iuran.instance.index') ? 'active' : '' }}"
-          data-menu="iuran-warga" data-href="{{ route('keuangan.iuran.instance.index') }}">
-          Iuran Warga
-        </div>
-        <div class="submenu-item {{ request()->routeIs('keuangan.kas.index') ? 'active' : '' }}" data-menu="kas-rt"
-          data-href="{{ route('keuangan.kas.index') }}">
-          Kas RT/RW
-        </div>
-        <div class="submenu-item {{ request()->routeIs('keuangan.pengeluaran.index') ? 'active' : '' }}"
-          data-menu="pengeluaran" data-href="{{ route('keuangan.pengeluaran.index') }}">
-          Pengeluaran
-        </div>
-        {{-- Tambahan: Master Kategori Keuangan --}}
-        <div class="submenu-item {{ request()->routeIs('keuangan.kategori.index') ? 'active' : '' }}"
-          data-menu="kategori-keuangan" data-href="{{ route('keuangan.kategori.index') }}">
-          Master Kategori Keuangan
-        </div>
+        <div id="submenu-keuangan" class="sidebar-submenu hidden">
+          <div class="submenu-item {{ request()->routeIs('keuangan.iuran.template.index') ? 'active' : '' }}"
+            data-menu="iuran-template" data-href="{{ route('keuangan.iuran.template.index') }}">
+            Template Iuran
+          </div>
+          <div class="submenu-item {{ request()->routeIs('keuangan.iuran.instance.index') ? 'active' : '' }}"
+            data-menu="iuran-warga" data-href="{{ route('keuangan.iuran.instance.index') }}">
+            Iuran Warga
+          </div>
+          <div class="submenu-item {{ request()->routeIs('keuangan.kas.index') ? 'active' : '' }}" data-menu="kas-rt"
+            data-href="{{ route('keuangan.kas.index') }}">
+            Kas RT/RW
+          </div>
+          <div class="submenu-item {{ request()->routeIs('keuangan.pengeluaran.index') ? 'active' : '' }}"
+            data-menu="pengeluaran" data-href="{{ route('keuangan.pengeluaran.index') }}">
+            Pengeluaran
+          </div>
+          {{-- Tambahan: Master Kategori Keuangan --}}
+          <div class="submenu-item {{ request()->routeIs('keuangan.kategori.index') ? 'active' : '' }}"
+            data-menu="kategori-keuangan" data-href="{{ route('keuangan.kategori.index') }}">
+            Master Kategori Keuangan
+          </div>
 
-        {{-- Tambahan: Metode Pembayaran --}}
-        <div class="submenu-item {{ request()->routeIs('keuangan.metode.index') ? 'active' : '' }}"
-          data-menu="metode-pembayaran" data-href="{{ route('keuangan.metode.index') }}">
-          Metode Pembayaran
+          {{-- Tambahan: Metode Pembayaran --}}
+          <div class="submenu-item {{ request()->routeIs('keuangan.metode.index') ? 'active' : '' }}"
+            data-menu="metode-pembayaran" data-href="{{ route('keuangan.metode.index') }}">
+            Metode Pembayaran
+          </div>
         </div>
       </div>
-    </div>
+    @endif
 
     {{-- KEGIATAN --}}
     <div>
@@ -119,54 +123,62 @@
         <div class="icon"><i data-lucide="bar-chart-3" class="w-5 h-5"></i></div>
         <div class="label sidebar-label">Laporan</div>
       </div>
-      <div id="submenu-laporan" class="sidebar-submenu hidden">
-        <div class="submenu-item" data-menu="laporan-warga" data-href="#">
+      <div id="submenu-laporan" class="sidebar-submenu hidden ">
+        <div class="submenu-item {{ request()->routeIs('laporan.warga.index') ? 'active' : '' }}"
+          data-menu="laporan-warga " data-href="{{ route('laporan.warga.index') }}">
           Laporan Warga
         </div>
-        <div class="submenu-item" data-menu="laporan-keuangan-detail" data-href="#">
+        <div class="submenu-item {{ request()->routeIs('laporan.keuangan.index') ? 'active' : '' }}"
+          data-menu="laporan-keuangan-detail" data-href="{{ route('laporan.keuangan.index') }}">
           Laporan Keuangan
         </div>
-        <div class="submenu-item" data-menu="laporan-kegiatan" data-href="#">
+        <div class="submenu-item {{ request()->routeIs('laporan.kegiatan.index') ? 'active' : '' }}"
+          data-menu="laporan-kegiatan" data-href="{{ route('laporan.kegiatan.index') }}">
           Laporan Kegiatan
         </div>
 
         {{-- Tambahan: Laporan Iuran --}}
-        <div class="submenu-item" data-menu="laporan-iuran" data-href="#">
+        <div class="submenu-item {{ request()->routeIs('laporan.iuran.index') ? 'active' : '' }}"
+          data-menu="laporan-iuran" data-href="{{ route('laporan.iuran.index') }}">
           Laporan Iuran
         </div>
 
         {{-- Tambahan: Laporan Mutasi Warga --}}
-        <div class="submenu-item" data-menu="laporan-mutasi-warga" data-href="#">
+        <div class="submenu-item {{ request()->routeIs('laporan.mutasi.index') ? 'active' : '' }}"
+          data-menu="laporan-mutasi-warga" data-href="{{ route('laporan.mutasi.index') }}">
           Laporan Mutasi Warga
         </div>
       </div>
     </div>
 
-    {{-- ADMINISTRASI / MASTER (Profil Wilayah & Notifikasi) --}}
-    <div>
-      <div class="menu-item {{ request()->routeIs('admin.*') ? 'active' : '' }}" data-menu="administrasi"
-        data-has-submenu="true" data-submenu="submenu-administrasi" type="button" data-href="">
-        <div class="icon"><i data-lucide="sliders" class="w-5 h-5"></i></div>
-        <div class="label sidebar-label">Administrasi</div>
-      </div>
-      <div id="submenu-administrasi" class="sidebar-submenu hidden">
-        <div class="submenu-item {{ request()->routeIs('admin.profil-wilayah.index') ? 'active' : '' }}"
-          data-menu="profil-wilayah" data-href="#">
-          Profil Wilayah
+    {{-- ADMINISTRASI / MASTER (Profil Wilayah & Notifikasi & Role) --}}
+    @if(in_array(auth()->user()->role->name ?? '', ['admin', 'ketua_rt']))
+      <div>
+        <div class="menu-item {{ request()->routeIs('admin.*') || request()->routeIs('administrasi.*') ? 'active' : '' }}"
+          data-menu="administrasi" data-has-submenu="true" data-submenu="submenu-administrasi" type="button" data-href="">
+          <div class="icon"><i data-lucide="sliders" class="w-5 h-5"></i></div>
+          <div class="label sidebar-label">Administrasi</div>
         </div>
-        <div class="submenu-item {{ request()->routeIs('admin.notifikasi.index') ? 'active' : '' }}"
-          data-menu="notifikasi" data-href="#">
-          Notifikasi
+        <div id="submenu-administrasi" class="sidebar-submenu hidden">
+          <div class="submenu-item {{ request()->routeIs('admin.profil-wilayah.index') ? 'active' : '' }}"
+            data-menu="profil-wilayah" data-href="#">
+            Profil Wilayah
+          </div>
+          <div class="submenu-item {{ request()->routeIs('admin.notifikasi.index') ? 'active' : '' }}"
+            data-menu="notifikasi" data-href="#">
+            Notifikasi
+          </div>
+          <div class="submenu-item {{ request()->routeIs('administrasi.roles.index') ? 'active' : '' }}"
+            data-menu="management-role" data-href="{{ route('administrasi.roles.index') }}">
+            Management Role
+          </div>
+          <div class="submenu-item {{ request()->routeIs('administrasi.users.index') ? 'active' : '' }}"
+            data-menu="management-user" data-href="{{ route('administrasi.users.index') }}">
+            Management User
+          </div>
         </div>
       </div>
-    </div>
-
-    {{-- PENGATURAN AKUN (existing, tidak diubah) --}}
-    <div class="menu-item mt-2 {{ request()->routeIs('account.settings*') ? 'active' : '' }}" data-menu="pengaturan"
-      data-has-submenu="false" data-href="{{ route('account.settings') }}">
-      <div class="icon"><i data-lucide="settings" class="w-5 h-5"></i></div>
-      <div class="label sidebar-label">Pengaturan</div>
-    </div>
+    @endif
   </nav>
 
   <div class="sb-footer sidebar-label">

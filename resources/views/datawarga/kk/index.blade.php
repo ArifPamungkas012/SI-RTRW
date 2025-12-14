@@ -7,48 +7,41 @@
     <div class="content">
         {{-- Header --}}
         <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px">
-            <div>
-                <h1 style="margin:0;font-size:22px;font-weight:700;color:#0f172a;">Daftar Kartu Keluarga</h1>
-                <p style="margin:6px 0 0 0;font-size:13px;color:rgba(15,23,42,0.6)">
-                    Kelola data Kartu Keluarga (KK)
-                </p>
-            </div>
 
-            <div style="display:flex;align-items:center;gap:12px">
                 <form method="GET" action="{{ route('datawarga.kk.index') }}"
                     style="display:flex;align-items:center;gap:8px">
                     <div style="position:relative">
-                        <input name="q" value="{{ request('q') }}" placeholder="Cari no KK / kepala keluarga..." style="padding:8px 12px 8px 32px;border-radius:10px;border:1px solid rgba(148,163,184,0.7);
-                                          font-size:13px;min-width:260px;outline:none;transition:border-color .18s ease"
-                            onfocus="this.style.borderColor='#10b981'"
+                        <input name="q" value="{{ request('q') }}" placeholder="Cari no KK / kepala keluarga..."
+                            style="padding:8px 12px 8px 32px;border-radius:10px;border:1px solid rgba(148,163,184,0.7);
+                                                  font-size:13px;min-width:260px;outline:none;transition:border-color .18s ease" onfocus="this.style.borderColor='#10b981'"
                             onblur="this.style.borderColor='rgba(148,163,184,0.7)'" />
                         <i data-lucide="search" style="width:16px;height:16px;color:#94a3b8;position:absolute;left:10px;top:50%;
-                                      transform:translateY(-50%);"></i>
+                                              transform:translateY(-50%);"></i>
                     </div>
                     <button type="submit" style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:10px;
-                                       border:none;background:#0f172a;color:white;font-size:13px;font-weight:500;
-                                       cursor:pointer;box-shadow:0 6px 16px rgba(15,23,42,0.18);
-                                       transition:background .18s,transform .12s">
+                                               border:none;background:#0f172a;color:white;font-size:13px;font-weight:500;
+                                               cursor:pointer;box-shadow:0 6px 16px rgba(15,23,42,0.18);
+                                               transition:background .18s,transform .12s">
                         <span>Cari</span>
                     </button>
                 </form>
 
                 {{-- Tombol buka modal Tambah KK --}}
                 <button type="button" id="openCreateKKModal" style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:10px;
-                                   background:linear-gradient(135deg,#10b981,#059669);color:white;font-size:13px;
-                                   font-weight:500;text-decoration:none;box-shadow:0 10px 25px rgba(16,185,129,0.35);
-                                   border:none;cursor:pointer;transition:transform .12s,box-shadow .18s;">
+                                           background:linear-gradient(135deg,#10b981,#059669);color:white;font-size:13px;
+                                           font-weight:500;text-decoration:none;box-shadow:0 10px 25px rgba(16,185,129,0.35);
+                                           border:none;cursor:pointer;transition:transform .12s,box-shadow .18s;">
                     <i data-lucide="plus" style="width:16px;height:16px;"></i>
                     <span>Tambah KK</span>
                 </button>
-            </div>
+
         </div>
 
         {{-- Flash messages --}}
         @if(session('success'))
             <div style="margin-bottom:18px;padding:10px 14px;border-radius:12px;
-                                background:#ecfdf5;border:1px solid #bbf7d0;
-                                color:#166534;display:flex;align-items:center;gap:8px;font-size:13px;">
+                                                background:#ecfdf5;border:1px solid #bbf7d0;
+                                                color:#166534;display:flex;align-items:center;gap:8px;font-size:13px;">
                 <i data-lucide="check-circle" style="width:18px;height:18px;color:#16a34a;"></i>
                 <span>{{ session('success') }}</span>
             </div>
@@ -56,7 +49,7 @@
 
         {{-- Card daftar KK --}}
         <div style="background:#fff;border-radius:12px;padding:0;border:1px solid rgba(2,6,23,0.04);
-                        box-shadow:0 6px 20px rgba(2,6,23,0.03);overflow:hidden;">
+                                box-shadow:0 6px 20px rgba(2,6,23,0.03);overflow:hidden;">
             <div style="overflow:auto;">
                 <table style="width:100%;border-collapse:collapse;font-size:13px;">
                     <thead style="background:#f8fafc;border-bottom:1px solid rgba(148,163,184,0.4);color:#475569;">
@@ -101,18 +94,19 @@
                                         <button type="button" class="btn-detail-kk"
                                             data-detail-url="{{ route('datawarga.kk.detail', $kk->id) }}" title="Lihat Detail"
                                             style="padding:6px 9px;border-radius:10px;background:#f8fafc;
-                                                           color:#0f172a;font-size:12px;font-weight:500;
-                                                           border:none;cursor:pointer;
-                                                           text-decoration:none;display:inline-flex;align-items:center;
-                                                           justify-content:center;transition:background .15s,color .15s;">
+                                                                           color:#0f172a;font-size:12px;font-weight:500;
+                                                                           border:none;cursor:pointer;
+                                                                           text-decoration:none;display:inline-flex;align-items:center;
+                                                                           justify-content:center;transition:background .15s,color .15s;">
                                             <i data-lucide="eye" style="width:14px;height:14px;margin-right:4px;"></i>
                                             Lihat
                                         </button>
 
-                                        <a href="{{ route('datawarga.kk.edit', $kk->id) }}" title="Edit" style="padding:6px 9px;border-radius:10px;background:#fffbeb;
-                                                      color:#b45309;font-size:12px;font-weight:500;
-                                                      text-decoration:none;display:inline-flex;align-items:center;
-                                                      justify-content:center;transition:background .15s,color .15s;">
+                                        <a href="{{ route('datawarga.kk.edit', $kk->id) }}" title="Edit"
+                                            style="padding:6px 9px;border-radius:10px;background:#fffbeb;
+                                                                      color:#b45309;font-size:12px;font-weight:500;
+                                                                      text-decoration:none;display:inline-flex;align-items:center;
+                                                                      justify-content:center;transition:background .15s,color .15s;">
                                             <i data-lucide="edit" style="width:14px;height:14px;margin-right:4px;"></i>
                                             Edit
                                         </a>
@@ -122,9 +116,9 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" title="Hapus" style="padding:6px 9px;border-radius:10px;border:none;
-                                                               background:#fef2f2;color:#b91c1c;font-size:12px;
-                                                               font-weight:500;cursor:pointer;display:inline-flex;
-                                                               align-items:center;justify-content:center;">
+                                                                               background:#fef2f2;color:#b91c1c;font-size:12px;
+                                                                               font-weight:500;cursor:pointer;display:inline-flex;
+                                                                               align-items:center;justify-content:center;">
                                                 <i data-lucide="trash-2" style="width:14px;height:14px;margin-right:4px;"></i>
                                                 Hapus
                                             </button>
@@ -147,23 +141,58 @@
             </div>
         </div>
 
-        {{-- Footer + pagination --}}
-        <div style="margin-top:18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
-            <div style="font-size:12px;color:#6b7280;">
-                Menampilkan {{ $kks->firstItem() ?? 0 }} - {{ $kks->lastItem() ?? 0 }}
-                dari {{ $kks->total() ?? 0 }} data
+        {{-- Pagination --}}
+        @if ($kks->hasPages())
+            <div class="table-pagination">
+                <div class="pagination-info">
+                    Menampilkan
+                    <strong>{{ $kks->firstItem() }}</strong>
+                    –
+                    <strong>{{ $kks->lastItem() }}</strong>
+                    dari
+                    <strong>{{ $kks->total() }}</strong>
+                    KK
+                </div>
+
+                <div class="pagination-nav">
+                    {{-- Tombol Sebelumnya --}}
+                    @if ($kks->onFirstPage())
+                        <span class="page-btn disabled">Sebelumnya</span>
+                    @else
+                        <a href="{{ $kks->previousPageUrl() }}" class="page-btn">Sebelumnya</a>
+                    @endif
+
+                    {{-- Nomor halaman --}}
+                    @php
+                        $start = max($kks->currentPage() - 2, 1);
+                        $end = min($kks->currentPage() + 2, $kks->lastPage());
+                    @endphp
+
+                    @for ($page = $start; $page <= $end; $page++)
+                        @if ($page == $kks->currentPage())
+                            <span class="page-number active">{{ $page }}</span>
+                        @else
+                            <a href="{{ $kks->url($page) }}" class="page-number">{{ $page }}</a>
+                        @endif
+                    @endfor
+
+                    {{-- Tombol Berikutnya --}}
+                    @if ($kks->hasMorePages())
+                        <a href="{{ $kks->nextPageUrl() }}" class="page-btn">Berikutnya</a>
+                    @else
+                        <span class="page-btn disabled">Berikutnya</span>
+                    @endif
+                </div>
             </div>
-            <div>
-                {{ $kks->withQueryString()->links() }}
-            </div>
-        </div>
+        @endif
     </div>
 
     {{-- MODAL DETAIL KK --}}
     <div id="detailKKModal" class="hidden" style="position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;
-                    background:rgba(15,23,42,0.35);backdrop-filter:blur(3px);">
-        <div style="background:#ffffff;border-radius:16px;box-shadow:0 24px 60px rgba(15,23,42,0.35);
-                        width:100%;max-width:720px;max-height:90vh;overflow:auto;padding:20px 22px;position:relative;">
+                            background:rgba(15,23,42,0.35);backdrop-filter:blur(3px);">
+        <div
+            style="background:#ffffff;border-radius:16px;box-shadow:0 24px 60px rgba(15,23,42,0.35);
+                                width:100%;max-width:720px;max-height:90vh;overflow:auto;padding:20px 22px;position:relative;">
 
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
                 <div>
@@ -173,13 +202,13 @@
                     </p>
                 </div>
                 <button type="button" data-close-kk-detail style="width:32px;height:32px;border-radius:999px;border:none;background:#f1f5f9;
-                                   display:inline-flex;align-items:center;justify-content:center;cursor:pointer;">
+                                           display:inline-flex;align-items:center;justify-content:center;cursor:pointer;">
                     <i data-lucide="x" style="width:18px;height:18px;color:#64748b;"></i>
                 </button>
             </div>
 
             <div id="detailKKBody" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
-                            gap:14px 32px;font-size:13px;color:#4b5563;">
+                                    gap:14px 32px;font-size:13px;color:#4b5563;">
                 {{-- diisi via JS --}}
             </div>
         </div>
@@ -188,9 +217,10 @@
 
     {{-- MODAL TAMBAH KK --}}
     <div id="createKKModal" class="hidden" style="position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;
-                    background:rgba(15,23,42,0.35);backdrop-filter:blur(3px);">
-        <div style="background:#ffffff;border-radius:16px;box-shadow:0 24px 60px rgba(15,23,42,0.35);
-                        width:100%;max-width:640px;max-height:90vh;overflow:auto;padding:20px 22px;position:relative;">
+                            background:rgba(15,23,42,0.35);backdrop-filter:blur(3px);">
+        <div
+            style="background:#ffffff;border-radius:16px;box-shadow:0 24px 60px rgba(15,23,42,0.35);
+                                width:100%;max-width:640px;max-height:90vh;overflow:auto;padding:20px 22px;position:relative;">
 
             {{-- Header modal --}}
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
@@ -201,7 +231,7 @@
                     </p>
                 </div>
                 <button type="button" data-close-kk-modal style="width:32px;height:32px;border-radius:999px;border:none;background:#f1f5f9;
-                                   display:inline-flex;align-items:center;justify-content:center;cursor:pointer;">
+                                           display:inline-flex;align-items:center;justify-content:center;cursor:pointer;">
                     <i data-lucide="x" style="width:18px;height:18px;color:#64748b;"></i>
                 </button>
             </div>
@@ -209,8 +239,8 @@
             {{-- Flash error --}}
             @if(session('error'))
                 <div style="margin-bottom:14px;padding:10px 14px;border-radius:12px;
-                                    background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;
-                                    display:flex;align-items:center;gap:8px;font-size:13px;">
+                                                    background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;
+                                                    display:flex;align-items:center;gap:8px;font-size:13px;">
                     <i data-lucide="alert-circle" style="width:18px;height:18px;color:#ef4444;"></i>
                     <span>{{ session('error') }}</span>
                 </div>
@@ -226,8 +256,9 @@
                         <label style="display:block;font-size:13px;font-weight:600;color:#0f172a;margin-bottom:4px;">
                             No. Kartu Keluarga <span style="color:#ef4444;">*</span>
                         </label>
-                        <input name="no_kk" value="{{ old('no_kk') }}" required placeholder="Masukkan nomor KK" style="width:100%;border-radius:10px;border:1px solid #e2e8f0;padding:8px 10px;
-                                          font-size:13px;outline:none;transition:border-color .18s,box-shadow .18s;">
+                        <input name="no_kk" value="{{ old('no_kk') }}" required placeholder="Masukkan nomor KK"
+                            style="width:100%;border-radius:10px;border:1px solid #e2e8f0;padding:8px 10px;
+                                                  font-size:13px;outline:none;transition:border-color .18s,box-shadow .18s;">
                         @error('no_kk')
                             <p style="color:#b91c1c;font-size:11px;margin-top:4px;">{{ $message }}</p>
                         @enderror
@@ -238,8 +269,9 @@
                         <label style="display:block;font-size:13px;font-weight:600;color:#0f172a;margin-bottom:4px;">
                             Alamat
                         </label>
-                        <textarea name="alamat" rows="3" placeholder="Alamat lengkap KK" style="width:100%;border-radius:10px;border:1px solid #e2e8f0;padding:8px 10px;
-                                             font-size:13px;outline:none;resize:vertical;">{{ old('alamat') }}</textarea>
+                        <textarea name="alamat" rows="3" placeholder="Alamat lengkap KK"
+                            style="width:100%;border-radius:10px;border:1px solid #e2e8f0;padding:8px 10px;
+                                                     font-size:13px;outline:none;resize:vertical;">{{ old('alamat') }}</textarea>
                         @error('alamat')
                             <p style="color:#b91c1c;font-size:11px;margin-top:4px;">{{ $message }}</p>
                         @enderror
@@ -252,14 +284,14 @@
                                 RT
                             </label>
                             <input name="rt" value="{{ old('rt') }}" style="width:100%;border-radius:10px;border:1px solid #e2e8f0;padding:8px 10px;
-                                              font-size:13px;outline:none;">
+                                                      font-size:13px;outline:none;">
                         </div>
                         <div>
                             <label style="display:block;font-size:13px;font-weight:600;color:#0f172a;margin-bottom:4px;">
                                 RW
                             </label>
                             <input name="rw" value="{{ old('rw') }}" style="width:100%;border-radius:10px;border:1px solid #e2e8f0;padding:8px 10px;
-                                              font-size:13px;outline:none;">
+                                                      font-size:13px;outline:none;">
                         </div>
                     </div>
 
@@ -269,7 +301,7 @@
                             Tanggal Dibuat
                         </label>
                         <input type="date" name="tanggal_dibuat" value="{{ old('tanggal_dibuat') }}" style="width:100%;border-radius:10px;border:1px solid #e2e8f0;padding:8px 10px;
-                                          font-size:13px;outline:none;">
+                                                  font-size:13px;outline:none;">
                     </div>
                 </div>
 
@@ -281,11 +313,11 @@
                     <div style="position:relative;">
                         <input type="text" class="kepala-warga-input" placeholder="Ketik nama / NIK kepala keluarga..."
                             autocomplete="off" style="width:100%;border-radius:8px;border:1px solid #e5e7f0;
-                                          padding:6px 8px;font-size:12px;outline:none;">
+                                                  padding:6px 8px;font-size:12px;outline:none;">
                         <div id="dropdown_kepala" style="position:absolute;top:40px;left:0;width:100%;background:white;
-                                        border:1px solid #e5e7eb;border-radius:8px;max-height:150px;
-                                        overflow-y:auto;display:none;z-index:60;
-                                        box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+                                                border:1px solid #e5e7eb;border-radius:8px;max-height:150px;
+                                                overflow-y:auto;display:none;z-index:60;
+                                                box-shadow:0 4px 12px rgba(0,0,0,0.1);">
                         </div>
 
                         {{-- hidden untuk simpan warga sebagai kepala --}}
@@ -303,8 +335,8 @@
                             Anggota Keluarga
                         </div>
                         <button type="button" id="btnAddAnggotaRow" style="padding:4px 10px;border-radius:999px;border:1px solid #e5e7eb;
-                                           background:white;font-size:11px;color:#10b981;display:inline-flex;
-                                           align-items:center;gap:4px;cursor:pointer;">
+                                                   background:white;font-size:11px;color:#10b981;display:inline-flex;
+                                                   align-items:center;gap:4px;cursor:pointer;">
                             <i data-lucide="plus" style="width:14px;height:14px;"></i>
                             <span>Tambah baris</span>
                         </button>
@@ -330,12 +362,12 @@
 
                             <input type="text" class="anggota-warga-input" placeholder="Ketik nama / NIK..."
                                 autocomplete="off" data-dropdown="dropdown_anggota___INDEX__" style="width:100%;border-radius:8px;border:1px solid #e5e7f0;
-                                              padding:6px 8px;font-size:12px;outline:none;">
+                                                      padding:6px 8px;font-size:12px;outline:none;">
 
                             <div id="dropdown_anggota___INDEX__" class="anggota-dropdown" style="position:absolute;top:60px;left:0;width:100%;background:white;
-                                            border:1px solid #e5e7eb;border-radius:8px;max-height:150px;
-                                            overflow-y:auto;display:none;z-index:60;
-                                            box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+                                                    border:1px solid #e5e7eb;border-radius:8px;max-height:150px;
+                                                    overflow-y:auto;display:none;z-index:60;
+                                                    box-shadow:0 4px 12px rgba(0,0,0,0.1);">
                             </div>
 
                             <input type="hidden" name="anggota[__INDEX__][warga_id]" class="anggota-warga-id">
@@ -346,7 +378,7 @@
                                 Hubungan
                             </label>
                             <select name="anggota[__INDEX__][hubungan]" style="width:100%;border-radius:10px;border:1px solid #e2e8f0;
-                                               padding:6px 8px;font-size:13px;outline:none;background:white;">
+                                                       padding:6px 8px;font-size:13px;outline:none;background:white;">
                                 <option value="">-- Pilih --</option>
                                 <option value="Istri">Istri</option>
                                 <option value="Anak">Anak</option>
@@ -356,7 +388,7 @@
 
                         <div style="padding-bottom:4px;display:flex;align-items:center;justify-content:flex-end;">
                             <button type="button" class="btn-remove-anggota" style="padding:6px 8px;border-radius:999px;border:1px solid #fee2e2;
-                                               background:#fef2f2;color:#b91c1c;font-size:11px;cursor:pointer;">
+                                                       background:#fef2f2;color:#b91c1c;font-size:11px;cursor:pointer;">
                                 Hapus
                             </button>
                         </div>
@@ -365,15 +397,15 @@
 
                 {{-- Footer aksi --}}
                 <div style="margin-top:18px;padding-top:14px;border-top:1px solid #e5e7eb;
-                                display:flex;justify-content:flex-end;gap:8px;">
+                                        display:flex;justify-content:flex-end;gap:8px;">
                     <button type="button" data-close-kk-modal style="padding:8px 14px;border-radius:10px;border:1px solid #e5e7eb;
-                                       background:white;color:#475569;font-size:13px;font-weight:500;
-                                       cursor:pointer;">
+                                               background:white;color:#475569;font-size:13px;font-weight:500;
+                                               cursor:pointer;">
                         Batal
                     </button>
                     <button type="submit" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:10px;
-                                       border:none;background:#0f172a;color:white;font-size:13px;font-weight:600;
-                                       cursor:pointer;box-shadow:0 8px 20px rgba(15,23,42,0.35);">
+                                               border:none;background:#0f172a;color:white;font-size:13px;font-weight:600;
+                                               cursor:pointer;box-shadow:0 8px 20px rgba(15,23,42,0.35);">
                         <i data-lucide="save" style="width:16px;height:16px;"></i>
                         <span>Simpan KK</span>
                     </button>
@@ -619,74 +651,74 @@
                             var tgl = data.tanggal_dibuat ? data.tanggal_dibuat : '-';
 
                             var html = `
-                                    <div>
-                                        <div style="font-size:12px;color:#9ca3af;">No. KK</div>
-                                        <div style="font-weight:600;color:#0f172a;">${data.no_kk ?? '-'}</div>
-                                    </div>
-                                    <div>
-                                        <div style="font-size:12px;color:#9ca3af;">Kepala Keluarga</div>
-                                        <div style="font-weight:600;color:#0f172a;">${data.kepala_keluarga ?? '-'}</div>
-                                    </div>
-                                    <div>
-                                        <div style="font-size:12px;color:#9ca3af;">Alamat</div>
-                                        <div>${data.alamat ?? '-'}</div>
-                                    </div>
-                                    <div>
-                                        <div style="font-size:12px;color:#9ca3af;">RT / RW</div>
-                                        <div>${data.rt ?? '-'} / ${data.rw ?? '-'}</div>
-                                    </div>
-                                    <div>
-                                        <div style="font-size:12px;color:#9ca3af;">Tanggal Dibuat</div>
-                                        <div>${tgl}</div>
-                                    </div>
-                                    <div>
-                                        <div style="font-size:12px;color:#9ca3af;">Jumlah Anggota</div>
-                                        <div>${data.jumlah_anggota ?? 0} orang</div>
-                                    </div>
-                                `;
+                                            <div>
+                                                <div style="font-size:12px;color:#9ca3af;">No. KK</div>
+                                                <div style="font-weight:600;color:#0f172a;">${data.no_kk ?? '-'}</div>
+                                            </div>
+                                            <div>
+                                                <div style="font-size:12px;color:#9ca3af;">Kepala Keluarga</div>
+                                                <div style="font-weight:600;color:#0f172a;">${data.kepala_keluarga ?? '-'}</div>
+                                            </div>
+                                            <div>
+                                                <div style="font-size:12px;color:#9ca3af;">Alamat</div>
+                                                <div>${data.alamat ?? '-'}</div>
+                                            </div>
+                                            <div>
+                                                <div style="font-size:12px;color:#9ca3af;">RT / RW</div>
+                                                <div>${data.rt ?? '-'} / ${data.rw ?? '-'}</div>
+                                            </div>
+                                            <div>
+                                                <div style="font-size:12px;color:#9ca3af;">Tanggal Dibuat</div>
+                                                <div>${tgl}</div>
+                                            </div>
+                                            <div>
+                                                <div style="font-size:12px;color:#9ca3af;">Jumlah Anggota</div>
+                                                <div>${data.jumlah_anggota ?? 0} orang</div>
+                                            </div>
+                                        `;
 
                             var anggota = data.anggota || [];
                             if (anggota.length > 0) {
                                 var rows = '';
                                 anggota.forEach(function (a) {
                                     rows += `
-                                            <tr>
-                                                <td style="padding:6px 10px;font-size:12px;border-bottom:1px solid #e5e7eb;">${a.no ?? ''}</td>
-                                                <td style="padding:6px 10px;font-size:12px;border-bottom:1px solid #e5e7eb;">${a.nama ?? '-'}</td>
-                                                <td style="padding:6px 10px;font-size:12px;border-bottom:1px solid #e5e7eb;">${a.nik ?? '-'}</td>
-                                                <td style="padding:6px 10px;font-size:12px;border-bottom:1px solid #e5e7eb;">${a.hubungan ?? '-'}</td>
-                                                <td style="padding:6px 10px;font-size:12px;border-bottom:1px solid #e5e7eb;">${a.keterangan ?? '-'}</td>
-                                            </tr>
-                                        `;
+                                                    <tr>
+                                                        <td style="padding:6px 10px;font-size:12px;border-bottom:1px solid #e5e7eb;">${a.no ?? ''}</td>
+                                                        <td style="padding:6px 10px;font-size:12px;border-bottom:1px solid #e5e7eb;">${a.nama ?? '-'}</td>
+                                                        <td style="padding:6px 10px;font-size:12px;border-bottom:1px solid #e5e7eb;">${a.nik ?? '-'}</td>
+                                                        <td style="padding:6px 10px;font-size:12px;border-bottom:1px solid #e5e7eb;">${a.hubungan ?? '-'}</td>
+                                                        <td style="padding:6px 10px;font-size:12px;border-bottom:1px solid #e5e7eb;">${a.keterangan ?? '-'}</td>
+                                                    </tr>
+                                                `;
                                 });
 
                                 html += `
-                                        <div style="grid-column:1/3;margin-top:16px;">
-                                            <div style="font-size:12px;color:#9ca3af;margin-bottom:6px;">Daftar Anggota</div>
-                                            <div style="border-radius:10px;border:1px solid #e5e7eb;overflow:hidden;">
-                                                <table style="width:100%;border-collapse:collapse;">
-                                                    <thead style="background:#f9fafb;">
-                                                        <tr>
-                                                            <th style="padding:6px 10px;text-align:left;font-size:12px;color:#6b7280;">No</th>
-                                                            <th style="padding:6px 10px;text-align:left;font-size:12px;color:#6b7280;">Nama</th>
-                                                            <th style="padding:6px 10px;text-align:left;font-size:12px;color:#6b7280;">NIK</th>
-                                                            <th style="padding:6px 10px;text-align:left;font-size:12px;color:#6b7280;">Hubungan</th>
-                                                            <th style="padding:6px 10px;text-align:left;font-size:12px;color:#6b7280;">Keterangan</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        ${rows}
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    `;
+                                                <div style="grid-column:1/3;margin-top:16px;">
+                                                    <div style="font-size:12px;color:#9ca3af;margin-bottom:6px;">Daftar Anggota</div>
+                                                    <div style="border-radius:10px;border:1px solid #e5e7eb;overflow:hidden;">
+                                                        <table style="width:100%;border-collapse:collapse;">
+                                                            <thead style="background:#f9fafb;">
+                                                                <tr>
+                                                                    <th style="padding:6px 10px;text-align:left;font-size:12px;color:#6b7280;">No</th>
+                                                                    <th style="padding:6px 10px;text-align:left;font-size:12px;color:#6b7280;">Nama</th>
+                                                                    <th style="padding:6px 10px;text-align:left;font-size:12px;color:#6b7280;">NIK</th>
+                                                                    <th style="padding:6px 10px;text-align:left;font-size:12px;color:#6b7280;">Hubungan</th>
+                                                                    <th style="padding:6px 10px;text-align:left;font-size:12px;color:#6b7280;">Keterangan</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                ${rows}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            `;
                             } else {
                                 html += `
-                                        <div style="grid-column:1/3;margin-top:16px;font-size:12px;color:#6b7280;">
-                                            Belum ada anggota terdaftar pada KK ini.
-                                        </div>
-                                    `;
+                                                <div style="grid-column:1/3;margin-top:16px;font-size:12px;color:#6b7280;">
+                                                    Belum ada anggota terdaftar pada KK ini.
+                                                </div>
+                                            `;
                             }
 
                             detailBody.innerHTML = html;
