@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
+use Faker\Factory as Faker;
+
 
 // Models
 use App\Models\{
@@ -31,7 +33,7 @@ class SIRTRWSeeder extends Seeder
 {
     public function run(): void
     {
-        $faker = fake('id_ID');
+        $faker = Faker::create('id_ID');
 
         /* ===========================================================
          * 1. PROFIL WILAYAH
