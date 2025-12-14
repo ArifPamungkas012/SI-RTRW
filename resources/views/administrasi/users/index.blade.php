@@ -38,7 +38,7 @@
 
         {{-- Table Card --}}
         <div style="background:#fff;border-radius:12px;padding:0;border:1px solid rgba(2,6,23,0.04);
-                            box-shadow:0 6px 20px rgba(2,6,23,0.03);overflow:hidden;">
+                                box-shadow:0 6px 20px rgba(2,6,23,0.03);overflow:hidden;">
             <div style="overflow:auto;">
                 <table style="width:100%;border-collapse:collapse;font-size:13px;">
                     <thead style="background:#f8fafc;border-bottom:1px solid rgba(148,163,184,0.4);color:#475569;">
@@ -46,7 +46,7 @@
                             <th style="padding:12px 18px;text-align:left;font-weight:600;">No</th>
                             <th style="padding:12px 18px;text-align:left;font-weight:600;">Nama</th>
                             <th style="padding:12px 18px;text-align:left;font-weight:600;">Username</th>
-                            <th style="padding:12px 18px;text-align:left;font-weight:600;"></th>Email</th>
+                            <th style="padding:12px 18px;text-align:left;font-weight:600;">Email</th>
                             <th style="padding:12px 18px;text-align:left;font-weight:600;">Role</th>
                             <th style="padding:12px 18px;text-align:right;font-weight:600;">Aksi</th>
                         </tr>

@@ -21,7 +21,7 @@
                 </form>
 
                 <button id="openCreateModal" style="padding:8px 14px;border-radius:10px;background:#0f172a;color:white;
-                                       border:none;font-size:13px;font-weight:500;cursor:pointer;">
+                                           border:none;font-size:13px;font-weight:500;cursor:pointer;">
                     <i data-lucide="plus" style="width:14px;height:14px;margin-bottom:-2px;"></i> Tambah Role
                 </button>
             </div>
