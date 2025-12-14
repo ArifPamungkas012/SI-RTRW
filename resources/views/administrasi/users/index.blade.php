@@ -38,14 +38,15 @@
 
         {{-- Table Card --}}
         <div style="background:#fff;border-radius:12px;padding:0;border:1px solid rgba(2,6,23,0.04);
-                        box-shadow:0 6px 20px rgba(2,6,23,0.03);overflow:hidden;">
+                            box-shadow:0 6px 20px rgba(2,6,23,0.03);overflow:hidden;">
             <div style="overflow:auto;">
                 <table style="width:100%;border-collapse:collapse;font-size:13px;">
                     <thead style="background:#f8fafc;border-bottom:1px solid rgba(148,163,184,0.4);color:#475569;">
                         <tr>
                             <th style="padding:12px 18px;text-align:left;font-weight:600;">No</th>
                             <th style="padding:12px 18px;text-align:left;font-weight:600;">Nama</th>
-                            <th style="padding:12px 18px;text-align:left;font-weight:600;">Email</th>
+                            <th style="padding:12px 18px;text-align:left;font-weight:600;">Username</th>
+                            <th style="padding:12px 18px;text-align:left;font-weight:600;"></th>Email</th>
                             <th style="padding:12px 18px;text-align:left;font-weight:600;">Role</th>
                             <th style="padding:12px 18px;text-align:right;font-weight:600;">Aksi</th>
                         </tr>
@@ -64,6 +65,7 @@
                                         </div>
                                     @endif
                                 </td>
+                                <td style="padding:10px 18px;color:#64748b;">{{ $user->username }}</td>
                                 <td style="padding:10px 18px;color:#64748b;">{{ $user->email }}</td>
                                 <td style="padding:10px 18px;">
                                     @php
@@ -111,7 +113,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" style="padding:40px;text-align:center;color:#6b7280;">
+                                <td colspan="6" style="padding:40px;text-align:center;color:#6b7280;">
                                     <div style="margin-bottom:10px;display:flex;justify-content:center;">
                                         <i data-lucide="users" style="width:32px;height:32px;color:#e2e8f0;"></i>
                                     </div>
@@ -149,13 +151,20 @@
                             <option value="{{ $w->id }}">{{ $w->nama }} ({{ $w->nik }})</option>
                         @endforeach
                     </select>
-                    <p style="margin:4px 0 0 0;font-size:11px;color:#64748b">Nama & Username akan otomatis diambil dari data
+                    <p style="margin:4px 0 0 0;font-size:11px;color:#64748b">Nama akan otomatis diambil dari data
                         warga.</p>
                 </div>
 
                 <div style="margin-bottom:16px">
-                    <label style="display:block;margin-bottom:6px;font-size:13px;font-weight:600;color:#475569">Email
-                        Login</label>
+                    <label
+                        style="display:block;margin-bottom:6px;font-size:13px;font-weight:600;color:#475569">Username</label>
+                    <input type="text" name="username" required
+                        style="width:100%;padding:10px;border-radius:8px;border:1px solid #e2e8f0;font-size:14px;outline:none">
+                </div>
+
+                <div style="margin-bottom:16px">
+                    <label
+                        style="display:block;margin-bottom:6px;font-size:13px;font-weight:600;color:#475569">Email</label>
                     <input type="email" name="email" required
                         style="width:100%;padding:10px;border-radius:8px;border:1px solid #e2e8f0;font-size:14px;outline:none">
                 </div>

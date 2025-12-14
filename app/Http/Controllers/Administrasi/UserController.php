@@ -42,6 +42,7 @@ class UserController extends Controller
                 'exists:warga,id',
                 Rule::unique('users', 'warga_id')
             ],
+            'username' => 'required|string|max:50|unique:users,username|alpha_dash',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
             'role_id' => 'required|exists:roles,id',
@@ -50,7 +51,7 @@ class UserController extends Controller
         $warga = Warga::findOrFail($request->warga_id);
 
         User::create([
-            'username' => $warga->nik, // 🔥 FIX UTAMA
+            'username' => $request->username,
             'name' => $warga->nama,
             'email' => $request->email,
             'password' => bcrypt($request->password),
